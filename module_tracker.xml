@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_tracker" default="compile.module.tracker">
+  <dirname property="module.tracker.basedir" file="${ant.file.module_tracker}"/>
+  
+  <property name="module.jdk.home.tracker" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.tracker" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.tracker" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.tracker" value="-encoding windows-1251 -source 1.6 ${compiler.args}"/>
+  
+  <property name="tracker.output.dir" value="${module.tracker.basedir}/out/production/Tracker"/>
+  <property name="tracker.testoutput.dir" value="${module.tracker.basedir}/out/test/Tracker"/>
+  
+  <path id="tracker.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="tracker.module.production.classpath">
+    <path refid="${module.jdk.classpath.tracker}"/>
+    <path refid="library.gwt-user.classpath"/>
+    <pathelement location="${basedir}/lib/aopalliance.jar"/>
+    <pathelement location="${basedir}/lib/gin-1.5-post-gwt-2.2.jar"/>
+    <pathelement location="${basedir}/lib/guice-assistedinject-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/guice-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/javax.inject.jar"/>
+    <pathelement location="${basedir}/lib/mvp4g-1.4.0.jar"/>
+  </path>
+  
+  <path id="tracker.runtime.production.module.classpath">
+    <pathelement location="${tracker.output.dir}"/>
+    <path refid="library.gwt-user.classpath"/>
+    <pathelement location="${basedir}/lib/aopalliance.jar"/>
+    <pathelement location="${basedir}/lib/gin-1.5-post-gwt-2.2.jar"/>
+    <pathelement location="${basedir}/lib/guice-assistedinject-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/guice-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/javax.inject.jar"/>
+    <pathelement location="${basedir}/lib/mvp4g-1.4.0.jar"/>
+  </path>
+  
+  <path id="tracker.module.classpath">
+    <path refid="${module.jdk.classpath.tracker}"/>
+    <pathelement location="${tracker.output.dir}"/>
+    <path refid="library.gwt-user.classpath"/>
+    <pathelement location="${basedir}/lib/aopalliance.jar"/>
+    <pathelement location="${basedir}/lib/gin-1.5-post-gwt-2.2.jar"/>
+    <pathelement location="${basedir}/lib/guice-assistedinject-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/guice-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/javax.inject.jar"/>
+    <pathelement location="${basedir}/lib/mvp4g-1.4.0.jar"/>
+  </path>
+  
+  <path id="tracker.runtime.module.classpath">
+    <pathelement location="${tracker.testoutput.dir}"/>
+    <pathelement location="${tracker.output.dir}"/>
+    <path refid="library.gwt-user.classpath"/>
+    <pathelement location="${basedir}/lib/aopalliance.jar"/>
+    <pathelement location="${basedir}/lib/gin-1.5-post-gwt-2.2.jar"/>
+    <pathelement location="${basedir}/lib/guice-assistedinject-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/guice-snapshot.jar"/>
+    <pathelement location="${basedir}/lib/javax.inject.jar"/>
+    <pathelement location="${basedir}/lib/mvp4g-1.4.0.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.tracker">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.tracker">
+    <patternset refid="excluded.from.module.tracker"/>
+  </patternset>
+  
+  <path id="tracker.module.sourcepath">
+    <dirset dir="${module.tracker.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.tracker" depends="compile.module.tracker.production,compile.module.tracker.tests" description="Compile module Tracker"/>
+  
+  <target name="compile.module.tracker.production" depends="register.custom.compilers" description="Compile module Tracker; production classes">
+    <mkdir dir="${tracker.output.dir}"/>
+    <javac2 destdir="${tracker.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.tracker}/javac">
+      <compilerarg line="${compiler.args.tracker}"/>
+      <bootclasspath refid="tracker.module.bootclasspath"/>
+      <classpath refid="tracker.module.production.classpath"/>
+      <src refid="tracker.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.tracker"/>
+    </javac2>
+    
+    <copy todir="${tracker.output.dir}">
+      <fileset dir="${module.tracker.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.tracker.tests" depends="register.custom.compilers,compile.module.tracker.production" description="compile module Tracker; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.tracker" description="cleanup module">
+    <delete dir="${tracker.output.dir}"/>
+    <delete dir="${tracker.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.tracker" value="${module.tracker.basedir}/GWTCompilerOutput_tracker"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.tracker" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.tracker}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx1024m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.tracker}/gwt-dev.jar"/>
+        <path refid="tracker.module.sourcepath"/>
+        <path refid="tracker.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.tracker}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.tracker" depends="compile.module.tracker" description="Compile all GWT modules in module Tracker">
+    <property name="gwt.sdk.home.tracker" value="${gwt.sdk.home}"/>
+    <antcall target="run.gwt.compiler.tracker">
+      <param name="gwt.module.name" value="com.tracker.tracker"/>
+    </antcall>
+  </target>
+</project>
