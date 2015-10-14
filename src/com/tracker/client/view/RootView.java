@@ -6,8 +6,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.tracker.client.presenter.interfaces.IRootView;
-import com.tracker.client.presenter.interfaces.IRootView.IRootPresenter;
+import com.tracker.client.presenter.RootPresenter.IRootView;
+import com.tracker.client.presenter.IRootPresenter;
 
 public class RootView extends ReverseCompositeView<IRootPresenter> implements IRootView {
 

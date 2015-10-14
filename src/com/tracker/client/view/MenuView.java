@@ -5,8 +5,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
-import com.tracker.client.presenter.interfaces.IMenuView;
-import com.tracker.client.presenter.interfaces.IMenuView.IMenuPresenter;
+import com.tracker.client.presenter.MenuPresenter.IMenuView;
+import com.tracker.client.presenter.IMenuPresenter;
 
 public class MenuView extends ReverseCompositeView<IMenuPresenter> implements IMenuView {
 
@@ -24,7 +24,7 @@ public class MenuView extends ReverseCompositeView<IMenuPresenter> implements IM
         presenter.goToLogger();
     }
 
-    @UiHandler( "analytics" )
-    public void onClickAnalytics(ClickEvent e){ presenter.goToAnalytics(); }
+    //@UiHandler( "analytics" )
+    //public void onClickAnalytics(ClickEvent e){ presenter.goToAnalytics(); }
 
 }
