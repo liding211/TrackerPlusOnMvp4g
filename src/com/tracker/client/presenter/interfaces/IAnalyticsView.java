@@ -9,4 +9,5 @@ public interface IAnalyticsView extends IsWidget, LazyView {
 
     }
 
+    public void onGoToAnalytics();
 }

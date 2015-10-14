@@ -4,11 +4,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface IRootView extends IsWidget {
 
-    public interface IRootPresenter {
-
-    }
-
-    void setMenu( IsWidget menu );
+    public interface IRootPresenter {}
 
     void setBody( IsWidget body );
 

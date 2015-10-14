@@ -10,8 +10,7 @@ import com.tracker.client.view.AnalyticsView;
 @Presenter(view = AnalyticsView.class)
 public class AnalyticsPresenter extends LazyPresenter<IAnalyticsView, TrackerEventBus> implements IAnalyticsPresenter {
 
-    public void onGoToAnalytics(String name){
-        //view.setName( name );
+    public void onGoToAnalytics(){
         eventBus.setBody( view );
     }
 

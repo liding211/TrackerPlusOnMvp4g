@@ -3,6 +3,7 @@ package com.tracker.client;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.mvp4g.client.annotation.Event;
 import com.mvp4g.client.annotation.Events;
+import com.mvp4g.client.annotation.InitHistory;
 import com.mvp4g.client.annotation.Start;
 import com.mvp4g.client.event.EventBus;
 import com.tracker.client.presenter.MenuPresenter;
@@ -18,14 +19,18 @@ public interface TrackerEventBus extends EventBus {
     @Event( handlers = { MenuPresenter.class, RootPresenter.class } )
     void start();
 
+    @InitHistory
+    @Event( handlers = RootPresenter.class )
+    void init();
+
     /*
      * Layout events
      */
     @Event( handlers = RootPresenter.class )
-    void setMenu( IsWidget menu );
-
-    @Event( handlers = RootPresenter.class )
     void setBody( IsWidget body );
+
+    @Event( handlers = MenuPresenter.class )
+    void setMenu( IsWidget menu );
 
     /*
      * Place events

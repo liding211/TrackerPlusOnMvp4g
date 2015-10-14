@@ -13,18 +13,18 @@ public class RootView extends ReverseCompositeView<IRootPresenter> implements IR
 
     private static RootViewUiBinder uiBinder = GWT.create( RootViewUiBinder.class );
 
+    @UiField( provided = true )
+    Widget menu;
+
     @UiField
-    SimplePanel menu, body;
+    SimplePanel body;
 
     interface RootViewUiBinder extends UiBinder<Widget, RootView> {
     }
 
-    public RootView() {
+    public RootView( MenuView menu ) {
         initWidget( uiBinder.createAndBindUi( this ) );
     }
-
-    @Override
-    public void setMenu( IsWidget menu ) { this.menu.setWidget( menu ); }
 
     @Override
     public void setBody( IsWidget body ) {

@@ -9,7 +9,7 @@
 
     <!-- Default page to serve -->
     <welcome-file-list>
-        <welcome-file>Layout.html</welcome-file>
+        <welcome-file>tracker.html</welcome-file>
     </welcome-file-list>
 
 </web-app>

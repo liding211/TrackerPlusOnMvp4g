@@ -11,10 +11,8 @@ import com.tracker.client.view.RootView;
 @Presenter( view = RootView.class )
 public class RootPresenter extends BasePresenter<IRootView, TrackerEventBus> implements IRootPresenter {
 
-    public void onStart() { eventBus.goToLogger( "The application started." ); }
-
-    public void onSetMenu( IsWidget menu ) {
-        view.setMenu( menu );
+    public void onStart() {
+        eventBus.goToLogger( "The application started." );
     }
 
     public void onSetBody( IsWidget body ) {

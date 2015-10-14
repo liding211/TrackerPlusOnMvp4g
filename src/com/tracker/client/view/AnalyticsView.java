@@ -21,4 +21,8 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsView> implemen
         initWidget( uiBinder.createAndBindUi( this ) );
     }
 
+    public void onGoToAnalytics() {
+        initWidget( uiBinder.createAndBindUi( this ) );
+    }
+
 }

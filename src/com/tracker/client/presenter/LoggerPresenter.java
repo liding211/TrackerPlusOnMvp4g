@@ -10,7 +10,7 @@ import com.tracker.client.view.LoggerView;
 @Presenter(view = LoggerView.class)
 public class LoggerPresenter extends LazyPresenter<ILoggerView, TrackerEventBus> implements ILoggerPresenter {
 
-    public void onGoToLogger(String name){
+    public void onGoToLogger(){
         //view.setName( name );
         eventBus.setBody( view );
     }
