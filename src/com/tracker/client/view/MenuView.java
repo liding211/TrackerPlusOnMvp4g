@@ -24,7 +24,10 @@ public class MenuView extends ReverseCompositeView<IMenuPresenter> implements IM
         presenter.goToLogger();
     }
 
-    //@UiHandler( "analytics" )
-    //public void onClickAnalytics(ClickEvent e){ presenter.goToAnalytics(); }
+    @UiHandler( "analytics" )
+    public void onClickAnalytics(ClickEvent e){ presenter.goToAnalytics(); }
+
+    @UiHandler( "settings" )
+    public void onClickSettings(ClickEvent e){ presenter.goToSettings(); }
 
 }

@@ -21,8 +21,8 @@ public class MenuPresenter extends BasePresenter<MenuPresenter.IMenuView, Tracke
         eventBus.goToLogger();
     }
 
-    //@Override
-    //public void goToAnalytics() { eventBus.goToAnalytics(); }
+    @Override
+    public void goToAnalytics() { eventBus.goToAnalytics(); }
 
     @Override
     public void goToSettings() {

@@ -34,8 +34,8 @@ public interface TrackerEventBus extends EventBus {
     @Event( handlers = LoggerPresenter.class )
     void goToLogger();
 
-    //@Event( handlers = AnalyticsPresenter.class )
-    //void goToAnalytics();
+    @Event( handlers = AnalyticsPresenter.class )
+    void goToAnalytics();
 
     @Event( handlers = SettingsPresenter.class )
     void goToSettings();

@@ -3,5 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel>
 		<g:Anchor ui:field="logger">Logger</g:Anchor>
+		<g:Anchor ui:field="analytics">Analytics</g:Anchor>
+		<g:Anchor ui:field="settings">Settings</g:Anchor>
 	</g:HTMLPanel>
 </ui:UiBinder> 
