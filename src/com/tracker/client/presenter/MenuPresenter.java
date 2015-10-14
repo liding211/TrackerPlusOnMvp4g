@@ -1,18 +1,19 @@
 package com.tracker.client.presenter;
 
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.mvp4g.client.annotation.Presenter;
 import com.mvp4g.client.presenter.BasePresenter;
 import com.tracker.client.TrackerEventBus;
-import com.tracker.client.presenter.interfaces.IMenuView;
-import com.tracker.client.presenter.interfaces.IMenuView.IMenuPresenter;
+import com.tracker.client.presenter.IMenuPresenter;
 import com.tracker.client.view.MenuView;
 
 @Presenter( view = MenuView.class )
-public class MenuPresenter extends BasePresenter<IMenuView, TrackerEventBus> implements IMenuPresenter {
+public class MenuPresenter extends BasePresenter<MenuPresenter.IMenuView, TrackerEventBus> implements IMenuPresenter {
+
+    public interface IMenuView extends IsWidget {}
 
     public void onStart() {
-        eventBus.setMenu( view );
+        eventBus.setMenu(view);
     }
 
     @Override
@@ -27,4 +28,5 @@ public class MenuPresenter extends BasePresenter<IMenuView, TrackerEventBus> imp
     public void goToSettings() {
         eventBus.goToSettings();
     }
+
 }

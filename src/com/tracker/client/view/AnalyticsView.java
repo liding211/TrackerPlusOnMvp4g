@@ -2,11 +2,8 @@ package com.tracker.client.view;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.tracker.client.presenter.interfaces.IAnalyticsView;
-import com.tracker.client.presenter.interfaces.IAnalyticsView.IAnalyticsPresenter;
+import com.tracker.client.presenter.AnalyticsPresenter.IAnalyticsView;
 
 public class AnalyticsView extends ReverseCompositeView<IAnalyticsView> implements IAnalyticsView {
 
@@ -22,7 +19,7 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsView> implemen
     }
 
     public void onGoToAnalytics() {
-        initWidget( uiBinder.createAndBindUi( this ) );
+        initWidget(uiBinder.createAndBindUi(this));
     }
 
 }

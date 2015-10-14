@@ -5,10 +5,10 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.tracker.client.presenter.interfaces.ILoggerView;
-import com.tracker.client.presenter.interfaces.ILoggerView.ILoggerPresenter;
+import com.tracker.client.presenter.ILoggerPresenter;
+import com.tracker.client.presenter.LoggerPresenter.ILoggerView;
 
-public class LoggerView extends ReverseCompositeView<ILoggerView> implements ILoggerView {
+public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implements ILoggerView {
 
     private static LoggerViewUiBinder uiBinder = GWT.create( LoggerViewUiBinder.class );
 
