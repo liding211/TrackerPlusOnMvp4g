@@ -11,7 +11,7 @@
                 </tr>
             </table>
         </g:HTMLPanel>
-        <g:Widget ui:field="menu" />
+        <g:SimplePanel ui:field="menu" />
         <g:SimplePanel ui:field="body" />
     </g:HTMLPanel>
 </ui:UiBinder>

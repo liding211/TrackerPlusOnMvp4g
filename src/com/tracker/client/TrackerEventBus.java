@@ -19,24 +19,20 @@ public interface TrackerEventBus extends EventBus {
     @Event( handlers = { MenuPresenter.class, RootPresenter.class } )
     void start();
 
-    @InitHistory
-    @Event( handlers = RootPresenter.class )
-    void init();
-
     /*
      * Layout events
      */
     @Event( handlers = RootPresenter.class )
     void setBody( IsWidget body );
 
-    @Event( handlers = MenuPresenter.class )
+    @Event( handlers = RootPresenter.class )
     void setMenu( IsWidget menu );
 
     /*
      * Place events
      */
     @Event( handlers = LoggerPresenter.class )
-    void goToLogger( String name );
+    void goToLogger();
 
     //@Event( handlers = AnalyticsPresenter.class )
     //void goToAnalytics();

@@ -14,14 +14,17 @@ public class RootPresenter extends BasePresenter<RootPresenter.IRootView, Tracke
 
         void setBody( IsWidget body );
 
+        void setMenu( IsWidget menu );
+
     }
 
     public void onStart() {
-        eventBus.goToLogger("The application started.");
+        eventBus.goToLogger();
     }
 
     public void onSetBody( IsWidget body ) {
         view.setBody( body );
     }
 
+    public void onSetMenu( IsWidget menu ) { view.setMenu( menu ); }
 }

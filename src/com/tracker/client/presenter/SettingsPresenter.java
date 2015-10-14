@@ -13,8 +13,7 @@ public class SettingsPresenter extends LazyPresenter<SettingsPresenter.ISettings
 
     public interface ISettingsView extends IsWidget, LazyView {}
 
-    public void onGoToSettings(String name){
-        //view.setName( name );
+    public void onGoToSettings(){
         eventBus.setBody( view );
     }
 

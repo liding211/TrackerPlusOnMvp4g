@@ -15,8 +15,8 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     interface LoggerViewUiBinder extends UiBinder<Widget, LoggerView> {
     }
 
-    @UiField
-    Label text;
+//    @UiField
+//    Label text;
 
     @Override
     public void createView() {
