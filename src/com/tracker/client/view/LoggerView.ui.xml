@@ -3,7 +3,91 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
     <g:HTMLPanel>
         <g:HTMLPanel>
-            logger
+            <div class="tab-container" id="tracker-container">
+                <div class="well" id="time_tracker">
+                    <div class="row table">
+                        <h3 class="col-md-2">Time Tracker</h3>
+                        <div class="col-md-10">
+                            <ul class="list-inline list-unstyled">
+                                <li><button id="save-tracker-form">Add Time Log</button></li>
+                                <li><a href="#" id="reset-tracker-form">Reset</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row" id="tracker-form-container">
+                        <form id="tracker-form" name="tracker-form">
+                            <div class="col-md-3">
+                                <div class='form-group'>
+                                    <div class="input-group date" id='start_time_container'>
+                                        <input type='text' class="form-control" name="startTime" id="start_time" placeholder="Start date" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <span class="help-block hidden"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" size="100" class="form-control" name="title" id="item_title" placeholder="Item name" maxlength="30"/>
+                                    </div>
+                                    <span class="help-block hidden"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="input-group date spent-time-container">
+                                        <input type='text' class="form-control" name="duration" id="duration" placeholder="Time spent (hh:mm:ss)" />
+                                        <span class="input-group-addon" id="tracker-start-button">
+                                            <span class="glyphicon glyphicon-play" id="tracker-start-icon"></span>
+                                        </span>
+                                    </div>
+                                    <div class="input-group form-group spent-time-controller" style="display: none;">
+                                        <span class="input-group-addon" id="tracker-pause-button">
+                                            <span class="glyphicon glyphicon-pause" id="tracker-pause-icon"></span>
+                                        </span>
+                                        <span class="form-control" id="timer">00:00:00</span>
+                                        <span class="input-group-addon" id="tracker-stop-button">
+                                            <span class="glyphicon glyphicon-stop" id="tracker-stop-icon"></span>
+                                        </span>
+                                    </div>
+                                    <span class="help-block hidden"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group form-group">
+                                    <textarea class="form-control" name="description" id="description"  rows="2">Work description</textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <h3>Time Log</h3>
+                    <table class="time-log-table">
+                        <thead id="log-list-header">
+                            <tr>
+                                <th class="th-start-time" data-sort="startTime">Start time<span class="sort-type"></span></th>
+                                <th class="th-title" data-sort="title">Name<span class="sort-type"></span></th>
+                                <th class="th-duration" data-sort="duration">Time spent<span class="sort-type"></span></th>
+                                <th class="th-description">Description</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-of-tracker-logs"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
         </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

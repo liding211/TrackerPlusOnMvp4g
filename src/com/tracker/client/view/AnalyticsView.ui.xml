@@ -3,7 +3,55 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
     <g:HTMLPanel>
         <g:HTMLPanel>
-            analytics
+            <div class="tab-container" id="analytics-container">
+                <div class="row table">
+                    <div class="col-md-10">
+                        <h2>Time Aggregation</h2>
+                    </div>
+                    <div class="col-md-2 col-align-right">
+                        <span class="glyphicon glyphicon-list-alt" id="analytics-table"></span> /
+                        <span class="glyphicon glyphicon-stats" id="analytics-graph"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <ul class="list-inline list-unstyled">
+                            <li>Period:</li>
+                            <li><a href="#analytics/period/7_days" class="period-controller" data-value="7 days">7 days</a></li> |
+                            <li><a href="#analytics/period/1_month" class="period-controller" data-value="1 month">Month</a></li> |
+                            <li><a href="#analytics/period/3_months" class="period-controller" data-value="3 months">3 Months</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-align-right">
+                        <ul class="list-inline list-unstyled">
+                            <li>Group by:</li>
+                            <li><a href="#analytics/group_by/day" class="group-by-controller" data-value="day">Day</a></li> |
+                            <li><a href="#analytics/group_by/week" class="group-by-controller" data-value="week">Week</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="analytics-table-container">
+                        <table class="analytics-table">
+                            <thead>
+                                <th>Date</th>
+                                <th>Time Spent</th>
+                            </thead>
+                            <tbody id="analytics-rows-container">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-md-12" id="analytics-graph-container" hidden="true">
+                        <div id="chart_div"></div>
+                    </div>
+                </div>
+            </div>
         </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder>
