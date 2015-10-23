@@ -19,8 +19,7 @@ public class RootView extends ReverseCompositeView<IRootPresenter> implements IR
     @UiField
     SimplePanel menu;
 
-    interface RootViewUiBinder extends UiBinder<Widget, RootView> {
-    }
+    interface RootViewUiBinder extends UiBinder<Widget, RootView> {}
 
     public RootView() {
         initWidget( uiBinder.createAndBindUi( this ) );

@@ -6,6 +6,7 @@ import com.mvp4g.client.annotation.Events;
 import com.mvp4g.client.annotation.InitHistory;
 import com.mvp4g.client.annotation.Start;
 import com.mvp4g.client.event.EventBus;
+import com.sun.deploy.util.LoggerTraceListener;
 import com.tracker.client.presenter.MenuPresenter;
 import com.tracker.client.presenter.LoggerPresenter;
 import com.tracker.client.presenter.AnalyticsPresenter;
@@ -29,14 +30,35 @@ public interface TrackerEventBus extends EventBus {
     void setMenu( IsWidget menu );
 
     /*
-     * Place events
+     * Logger events
      */
     @Event( handlers = LoggerPresenter.class )
     void goToLogger();
 
+    @Event( handlers = LoggerPresenter.class )
+    void startTimer();
+
+    @Event( handlers = LoggerPresenter.class )
+    void stopTimer();
+
+    @Event( handlers = LoggerPresenter.class )
+    void pauseTimer();
+
+    @Event( handlers = LoggerPresenter.class )
+    void addLog();
+
+    @Event( handlers = LoggerPresenter.class )
+    void resetFormData();
+
+    /*
+     * Analytics events
+     */
     @Event( handlers = AnalyticsPresenter.class )
     void goToAnalytics();
 
+    /*
+     * Settings events
+     */
     @Event( handlers = SettingsPresenter.class )
     void goToSettings();
 }

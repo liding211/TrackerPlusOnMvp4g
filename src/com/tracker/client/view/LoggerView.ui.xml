@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:c="urn:import:com.tracker.client.view">
     <g:HTMLPanel>
         <g:HTMLPanel>
             <div class="tab-container" id="tracker-container">
@@ -37,22 +38,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <div class="input-group date spent-time-container">
-                                        <input type='text' class="form-control" name="duration" id="duration" placeholder="Time spent (hh:mm:ss)" />
-                                        <span class="input-group-addon" id="tracker-start-button">
-                                            <span class="glyphicon glyphicon-play" id="tracker-start-icon"></span>
-                                        </span>
-                                    </div>
-                                    <div class="input-group form-group spent-time-controller" style="display: none;">
-                                        <span class="input-group-addon" id="tracker-pause-button">
-                                            <span class="glyphicon glyphicon-pause" id="tracker-pause-icon"></span>
-                                        </span>
-                                        <span class="form-control" id="timer">00:00:00</span>
-                                        <span class="input-group-addon" id="tracker-stop-button">
-                                            <span class="glyphicon glyphicon-stop" id="tracker-stop-icon"></span>
-                                        </span>
-                                    </div>
-                                    <span class="help-block hidden"></span>
+                                    <c:LoggerTimerView/>
                                 </div>
                             </div>
                             <div class="col-md-3">
