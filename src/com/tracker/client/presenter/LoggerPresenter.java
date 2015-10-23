@@ -42,7 +42,6 @@ public class LoggerPresenter extends LazyPresenter<LoggerPresenter.ILoggerView, 
     }
 
     public void onStartTimer(){
-        this.logFormData.setStartTime( Duration.currentTimeMillis() );
         eventBus.setBody( view );
     };
 
