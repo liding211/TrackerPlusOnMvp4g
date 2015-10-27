@@ -10,11 +10,11 @@
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="timerControlPanel">
             <g:Anchor ui:field="pauseTimer" styleName="input-group-addon">
-                <span class="glyphicon glyphicon-pause" id="tracker-pause-icon"></span>
+                <span ui:field="pauseButtonIcon" class="glyphicon glyphicon-pause"></span>
             </g:Anchor>
             <g:Label ui:field="timerText" styleName="form-control" />
             <g:Anchor ui:field="stopTimer" styleName="input-group-addon">
-                <span class="glyphicon glyphicon-stop" id="tracker-stop-icon"></span>
+                <span class="glyphicon glyphicon-stop"></span>
             </g:Anchor>
         </g:HTMLPanel>
         <span class="help-block hidden"></span>

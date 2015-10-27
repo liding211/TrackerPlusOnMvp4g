@@ -10,8 +10,8 @@
                         <h3 class="col-md-2">Time Tracker</h3>
                         <div class="col-md-10">
                             <ul class="list-inline list-unstyled">
-                                <li><button id="save-tracker-form">Add Time Log</button></li>
-                                <li><a href="#" id="reset-tracker-form">Reset</a></li>
+                                <li><g:Button ui:field="addTimeLog">Add Time Log</g:Button></li>
+                                <li><g:Anchor ui:field="reset">Reset</g:Anchor></li>
                             </ul>
                         </div>
                     </div>

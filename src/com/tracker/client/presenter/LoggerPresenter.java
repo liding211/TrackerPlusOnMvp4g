@@ -23,27 +23,14 @@ public class LoggerPresenter extends LazyPresenter<LoggerPresenter.ILoggerView, 
     LoggerTimerView loggerTimer;
 
     public interface ILoggerView extends IsWidget, LazyView {}
-    private LogFormDataModel logFormData = new LogFormDataModel();
-
-//    @Override
-//    public void createPresenter() {
-//        Element startButton = DOM.getElementById("tracker-start-button");
-//
-//        Label.wrap(startButton).addClickHandler(new ClickHandler() {
-//            @Override
-//            public void onClick(ClickEvent event) {
-//                eventBus.startTimer();
-//            }
-//        });
-//    }
 
     public void onGoToLogger(){
         eventBus.setBody( view );
     }
 
-    public void onStartTimer(){
-        eventBus.setBody( view );
-    };
+//    public void onStartTimer(){
+//        eventBus.setBody( view );
+//    };
 
     public void onStopTimer(){
         Window.alert("onStopTimer");
@@ -64,4 +51,5 @@ public class LoggerPresenter extends LazyPresenter<LoggerPresenter.ILoggerView, 
         Window.alert("onResetFormData");
         eventBus.setBody( view );
     };
+
 }
