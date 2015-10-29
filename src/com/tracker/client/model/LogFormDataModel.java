@@ -2,14 +2,17 @@ package com.tracker.client.model;
 
 import com.google.gwt.json.client.*;
 import com.google.gwt.storage.client.Storage;
+import com.google.gwt.user.client.Window;
+
+import java.util.Date;
 
 public class LogFormDataModel {
 
-    private String tableNameInLocalStorage = "TrackerLoggerFormData";
-    private Long startTime = new Long(0);
-    private Long duration = new Long(0);
-    private String title = "";
-    private String description = "";
+    private String tableNameInLocalStorage;
+    private Long startTime;
+    private Long duration;
+    private String title;
+    private String description;
     private Storage localStorage = Storage.getLocalStorageIfSupported();
     private static LogFormDataModel instance;
 
@@ -21,6 +24,11 @@ public class LogFormDataModel {
     }
 
     private LogFormDataModel(){
+        tableNameInLocalStorage = "TrackerLoggerFormData";
+        startTime = new Date().getTime();
+        duration = new Long(0);
+        title = "";
+        description = "";
         fetchDataFromStorage();
     }
 
@@ -62,20 +70,20 @@ public class LogFormDataModel {
         }
     }
 
-    private void fetchDataFromStorage(){
+    public void fetchDataFromStorage(){
         if(localStorage != null){
             if(localStorage.getItem(tableNameInLocalStorage) != null) {
-                JSONValue jsonValue = JSONParser.parse(localStorage.getItem("TrackerLoggerFormData"));
+                JSONValue jsonValue = JSONParser.parse(localStorage.getItem(tableNameInLocalStorage));
                 JSONObject jsonObject = jsonValue.isObject();
-                startTime = Double.doubleToLongBits(jsonObject.get("startTime").isNumber().doubleValue());
-                duration = Double.doubleToLongBits(jsonObject.get("duration").isNumber().doubleValue());
-                title = jsonObject.get("title").toString();
-                description = jsonObject.get("description").toString();
+                startTime = Long.decode(jsonObject.get("startTime").isNumber().toString());
+                duration = Long.decode(jsonObject.get("duration").isNumber().toString());
+                title = jsonObject.get("title").isString().stringValue();
+                description = jsonObject.get("description").isString().stringValue();
             }
         }
     }
 
-    private void saveDataToStorage(){
+    public void saveDataToStorage(){
         if(localStorage != null){
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("startTime", new JSONNumber(startTime));

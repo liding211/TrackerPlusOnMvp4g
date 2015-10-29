@@ -5,6 +5,9 @@
     <!-- Inherit the core Web Toolkit stuff.                  -->
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='com.google.gwt.json.JSON'/>
+    <inherits name='com.github.gwtbootstrap.datetimepicker.Datetimepicker'/>
+    <inherits name='com.github.gwtbootstrap.datepicker.Datepicker'/>
+    <inherits name='com.github.gwtbootstrap.Bootstrap'/>
 
     <!-- Specify the app entry point class.                   -->
     <entry-point class="com.tracker.client.TrackerEntryPoint"/>
