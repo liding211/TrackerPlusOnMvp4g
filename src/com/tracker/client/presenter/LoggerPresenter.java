@@ -10,7 +10,6 @@ import com.mvp4g.client.view.LazyView;
 import com.tracker.client.TrackerEventBus;
 import com.tracker.client.model.LogFormDataModel;
 import com.tracker.client.model.LogModel;
-import com.tracker.client.view.LoggerTimerView;
 import com.tracker.client.view.LoggerView;
 
 import java.util.Date;
@@ -18,9 +17,6 @@ import java.util.Date;
 
 @Presenter(view = LoggerView.class)
 public class LoggerPresenter extends LazyPresenter<LoggerPresenter.ILoggerView, TrackerEventBus> implements ILoggerPresenter {
-
-    @UiField
-    LoggerTimerView loggerTimer;
 
     public interface ILoggerView extends IsWidget, LazyView {}
 

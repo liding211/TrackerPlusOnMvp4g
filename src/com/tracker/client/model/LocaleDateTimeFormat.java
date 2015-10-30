@@ -7,12 +7,15 @@ public class LocaleDateTimeFormat {
     private String dateFormat;
     private String timeFormat;
     private String example;
+    private String dateTimeFormatForDatepicker;
 
     public void setLocalName(String localName) { this.localName = localName; };
 
     public void setName(String name) { this.name = name; };
 
     public void setDateTimeFormat(String dateTimeFormat) { this.dateTimeFormat = dateTimeFormat; };
+
+    public void setDateTimeFormatForDatepicker(String dateTimeFormatForDatepicker) { this.dateTimeFormatForDatepicker = dateTimeFormatForDatepicker; };
 
     public void setDateFormat(String dateFormat) { this.dateFormat = dateFormat; };
 
@@ -25,6 +28,8 @@ public class LocaleDateTimeFormat {
     public String getName() { return this.name; };
 
     public String getDateTimeFormat() { return this.dateTimeFormat; };
+
+    public String getDateTimeFormatForDatepicker() { return this.dateTimeFormatForDatepicker; };
 
     public String getDateFormat() { return this.dateFormat; };
 

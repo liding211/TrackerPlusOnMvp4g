@@ -35,9 +35,6 @@ public interface TrackerEventBus extends EventBus {
     @Event( handlers = LoggerPresenter.class )
     void goToLogger();
 
-//    @Event( handlers = LoggerPresenter.class )
-//    void startTimer();
-
     @Event( handlers = LoggerPresenter.class )
     void stopTimer();
 

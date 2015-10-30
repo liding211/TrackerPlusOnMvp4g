@@ -16,7 +16,7 @@ public class LogFormDataModel {
     private Storage localStorage = Storage.getLocalStorageIfSupported();
     private static LogFormDataModel instance;
 
-    public static LogFormDataModel getInstance(){
+    public static synchronized LogFormDataModel getInstance(){
         if (instance == null){
             instance = new LogFormDataModel();
         }

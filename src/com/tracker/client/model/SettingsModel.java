@@ -2,6 +2,7 @@ package com.tracker.client.model;
 
 import com.google.gwt.json.client.*;
 import com.google.gwt.storage.client.Storage;
+import com.google.gwt.user.client.Window;
 
 import java.util.HashMap;
 
@@ -14,7 +15,7 @@ public class SettingsModel {
     private final String defaultLocaleName = "England";
     private static SettingsModel instance;
 
-    public static SettingsModel getInstance(){
+    public static synchronized SettingsModel getInstance(){
         if (instance == null){
             instance = new SettingsModel();
         }
@@ -29,22 +30,24 @@ public class SettingsModel {
 
         LocaleDateTimeFormat EnglandDateTimeFormat = new LocaleDateTimeFormat();
         EnglandDateTimeFormat.setName("England");
-        EnglandDateTimeFormat.setDateTimeFormat("dd/mm/yyyy hh:ii");
+        EnglandDateTimeFormat.setDateTimeFormatForDatepicker("dd/MM/yyyy hh:mm a");
+        EnglandDateTimeFormat.setDateTimeFormat("dd/mm/yyyy h:ii a");
         EnglandDateTimeFormat.setExample("18/09/2015 12:05");
         EnglandDateTimeFormat.setDateFormat("dd/mm/yyyy");
-        EnglandDateTimeFormat.setTimeFormat("hh:ii:ss");
+        EnglandDateTimeFormat.setTimeFormat("HH:mm:ss");
         EnglandDateTimeFormat.setLocalName("en");
 
         LocaleDateTimeFormat SwedenDateTimeFormat = new LocaleDateTimeFormat();
         SwedenDateTimeFormat.setName("Sweden");
+        SwedenDateTimeFormat.setDateTimeFormatForDatepicker("yyyy-MM-dd HH.mm");
         SwedenDateTimeFormat.setDateTimeFormat("yyyy-mm-dd hh.ii");
         SwedenDateTimeFormat.setExample("2015-09-18 15.59");
         SwedenDateTimeFormat.setDateFormat("yyyy-mm-dd");
-        SwedenDateTimeFormat.setTimeFormat("hh.ii.ss");
+        SwedenDateTimeFormat.setTimeFormat("HH.mm.ss");
         SwedenDateTimeFormat.setLocalName("se");
 
         availableDateTimeFormat.put("England", EnglandDateTimeFormat);
-        availableDateTimeFormat.put("Sweden", EnglandDateTimeFormat);
+        availableDateTimeFormat.put("Sweden", SwedenDateTimeFormat);
 
         fetchDataFromStorage();
         if(currentDateTimeFormat == null) {
@@ -81,5 +84,9 @@ public class SettingsModel {
 
     public LocaleDateTimeFormat getCurrentDateTimeFormat(){
         return currentDateTimeFormat;
+    }
+
+    public HashMap<String, LocaleDateTimeFormat> getAvailableDateTimeFormat(){
+        return availableDateTimeFormat;
     }
 }
