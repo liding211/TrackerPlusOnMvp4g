@@ -14,6 +14,10 @@ public class LogModel {
     private final String logKeyPrefix = "TrackerLog";
 
     public LogModel(){
+        startTime = new Long(0);
+        duration = new Long(0);
+        title = "";
+        description = "";
         logCollection = LogCollection.getInstance();
         localStorage = Storage.getLocalStorageIfSupported();
     }
@@ -32,9 +36,7 @@ public class LogModel {
         this.startTime = startTime;
     }
 
-    public void setDuration(Long duration){
-        this.duration = duration;
-    }
+    public void setDuration(Long duration){ this.duration = duration; }
 
     public void setTitle(String title){
         this.title = title;

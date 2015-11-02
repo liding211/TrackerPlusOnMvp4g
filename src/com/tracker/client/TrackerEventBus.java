@@ -35,18 +35,6 @@ public interface TrackerEventBus extends EventBus {
     @Event( handlers = LoggerPresenter.class )
     void goToLogger();
 
-    @Event( handlers = LoggerPresenter.class )
-    void stopTimer();
-
-    @Event( handlers = LoggerPresenter.class )
-    void pauseTimer();
-
-    @Event( handlers = LoggerPresenter.class )
-    void addLog();
-
-    @Event( handlers = LoggerPresenter.class )
-    void resetFormData();
-
     /*
      * Analytics events
      */

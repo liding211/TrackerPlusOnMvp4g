@@ -11,16 +11,14 @@
                     <b:Form type="HORIZONTAL" ui:field="logForm">
                         <b:Fieldset>
                             <b:FluidRow>
-                                <b:Column size="12">
-                                    <b:ControlGroup>
-                                        <b:ControlLabel>Time Tracker</b:ControlLabel>
-                                        <b:Controls>
-                                            <g:HTMLPanel>
-                                                <g:SubmitButton ui:field="addTimeLog" addStyleNames="btn">Add Time Log</g:SubmitButton>
-                                                <g:Anchor ui:field="reset">Reset</g:Anchor>
-                                            </g:HTMLPanel>
-                                        </b:Controls>
-                                    </b:ControlGroup>
+                                <b:Column size="3">
+                                    <b:Heading size="3">Time Tracker</b:Heading>
+                                </b:Column>
+                                <b:Column size="9">
+                                    <g:HTMLPanel>
+                                        <g:SubmitButton ui:field="addTimeLog" addStyleNames="btn">Add Time Log</g:SubmitButton>
+                                        <g:Anchor ui:field="reset">Reset</g:Anchor>
+                                    </g:HTMLPanel>
                                 </b:Column>
                             </b:FluidRow>
                             <b:FluidRow>

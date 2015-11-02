@@ -2,7 +2,6 @@ package com.tracker.client.model;
 
 import com.google.gwt.json.client.*;
 import com.google.gwt.storage.client.Storage;
-import com.google.gwt.user.client.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,7 @@ public class LogCollection {
     public void fetchAllLogs(){
         if(localStorage != null){
             if(localStorage.getItem(tableNameInLocalStorage) != null) {
+                logCollection.clear();
                 JSONValue jsonValue = JSONParser.parse(localStorage.getItem(tableNameInLocalStorage));
                 JSONObject jsonObject = jsonValue.isObject();
 
@@ -72,7 +72,6 @@ public class LogCollection {
     }
 
     public List<LogModel> getLogCollection(){
-        logCollection.clear();
         fetchAllLogs();
         return logCollection;
     }

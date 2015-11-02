@@ -23,29 +23,4 @@ public class LoggerPresenter extends LazyPresenter<LoggerPresenter.ILoggerView, 
     public void onGoToLogger(){
         eventBus.setBody( view );
     }
-
-//    public void onStartTimer(){
-//        eventBus.setBody( view );
-//    };
-
-    public void onStopTimer(){
-        Window.alert("onStopTimer");
-        eventBus.setBody( view );
-    };
-
-    public void onPauseTimer(){
-        Window.alert("onPauseTimer");
-        eventBus.setBody( view );
-    };
-
-    public void onAddLog(){
-        Window.alert("onAddLog");
-        eventBus.setBody( view );
-    };
-
-    public void onResetFormData(){
-        Window.alert("onResetFormData");
-        eventBus.setBody( view );
-    };
-
 }

@@ -31,6 +31,7 @@ public class SettingsModel {
         LocaleDateTimeFormat EnglandDateTimeFormat = new LocaleDateTimeFormat();
         EnglandDateTimeFormat.setName("England");
         EnglandDateTimeFormat.setDateTimeFormatForDatepicker("dd/MM/yyyy hh:mm a");
+        EnglandDateTimeFormat.setDateFormatForAnalytics("dd/MM/yyyy");
         EnglandDateTimeFormat.setDateTimeFormat("dd/mm/yyyy h:ii a");
         EnglandDateTimeFormat.setExample("18/09/2015 12:05");
         EnglandDateTimeFormat.setDateFormat("dd/mm/yyyy");
@@ -40,6 +41,7 @@ public class SettingsModel {
         LocaleDateTimeFormat SwedenDateTimeFormat = new LocaleDateTimeFormat();
         SwedenDateTimeFormat.setName("Sweden");
         SwedenDateTimeFormat.setDateTimeFormatForDatepicker("yyyy-MM-dd HH.mm");
+        SwedenDateTimeFormat.setDateFormatForAnalytics("yyyy-MM-dd");
         SwedenDateTimeFormat.setDateTimeFormat("yyyy-mm-dd hh.ii");
         SwedenDateTimeFormat.setExample("2015-09-18 15.59");
         SwedenDateTimeFormat.setDateFormat("yyyy-mm-dd");

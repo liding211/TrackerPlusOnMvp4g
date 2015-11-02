@@ -1,56 +1,51 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
     <g:HTMLPanel>
         <g:HTMLPanel>
             <div class="tab-container" id="analytics-container">
-                <div class="row table">
-                    <div class="col-md-10">
-                        <h2>Time Aggregation</h2>
-                    </div>
-                    <div class="col-md-2 col-align-right">
-                        <span class="glyphicon glyphicon-list-alt" id="analytics-table"></span> /
-                        <span class="glyphicon glyphicon-stats" id="analytics-graph"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <ul class="list-inline list-unstyled">
-                            <li>Period:</li>
-                            <li><a href="#analytics/period/7_days" class="period-controller" data-value="7 days">7 days</a></li> |
-                            <li><a href="#analytics/period/1_month" class="period-controller" data-value="1 month">Month</a></li> |
-                            <li><a href="#analytics/period/3_months" class="period-controller" data-value="3 months">3 Months</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4 col-align-right">
-                        <ul class="list-inline list-unstyled">
-                            <li>Group by:</li>
-                            <li><a href="#analytics/group_by/day" class="group-by-controller" data-value="day">Day</a></li> |
-                            <li><a href="#analytics/group_by/week" class="group-by-controller" data-value="week">Week</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12" id="analytics-table-container">
-                        <table class="analytics-table">
-                            <thead>
-                                <th>Date</th>
-                                <th>Time Spent</th>
-                            </thead>
-                            <tbody id="analytics-rows-container">
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="col-md-12" id="analytics-graph-container" hidden="true">
-                        <div id="chart_div"></div>
-                    </div>
-                </div>
+                <b:FluidRow>
+                    <b:Column size="10">
+                        <g:HTMLPanel>
+                            <b:Heading size="3">Time Aggregation</b:Heading>
+                        </g:HTMLPanel>
+                    </b:Column>
+                    <b:Column size="2">
+                        <g:HTMLPanel>
+                            <b:NavPills>
+                                <b:NavLink ui:field='tableIconPlaceholder' />
+                                <b:NavLink ui:field='graphIconPlaceholder' />
+                            </b:NavPills>
+                        </g:HTMLPanel>
+                    </b:Column>
+                </b:FluidRow>
+                <b:FluidRow>
+                    <b:Column size="8">
+                        <g:HTMLPanel>
+                            Period:
+                            <b:NavPills>
+                                <b:NavLink ui:field="periodDay">7 days</b:NavLink>
+                                <b:NavLink ui:field="periodMonth">Month</b:NavLink>
+                                <b:NavLink ui:field="periodThreeMonths">3 Months</b:NavLink>
+                            </b:NavPills>
+                        </g:HTMLPanel>
+                    </b:Column>
+                    <b:Column size="4">
+                        <g:HTMLPanel>
+                            Group by:
+                            <b:NavPills>
+                                <b:NavLink ui:field="groupByDay">Day</b:NavLink>
+                                <b:NavLink ui:field="groupByWeek">Week</b:NavLink>
+                            </b:NavPills>
+                        </g:HTMLPanel>
+                    </b:Column>
+                </b:FluidRow>
+                <b:FluidRow>
+                    <b:Column size="12">
+                        <g:HTMLPanel ui:field="DataPlaceHolder"/>
+                    </b:Column>
+                </b:FluidRow>
             </div>
         </g:HTMLPanel>
     </g:HTMLPanel>

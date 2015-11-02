@@ -10,6 +10,8 @@ import com.github.gwtbootstrap.datetimepicker.client.ui.DateTimeBoxAppended;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.TimeZone;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -18,6 +20,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.SubmitButton;
 import com.tracker.client.model.LogCollection;
@@ -27,6 +30,9 @@ import com.tracker.client.model.SettingsModel;
 import com.tracker.client.presenter.ILoggerPresenter;
 import com.tracker.client.presenter.LoggerPresenter.ILoggerView;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -76,11 +82,11 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
     @Override
     public void createView() {
+        initWidget( uiBinder.createAndBindUi(this) );
+
         logFormData = LogFormDataModel.getInstance();
         settings = SettingsModel.getInstance();
         logCollection = LogCollection.getInstance();
-
-        initWidget( uiBinder.createAndBindUi(this) );
 
         timerControlPanel.addStyleName("input-append input-prepend");
         timerControlPanel.setVisible(false);
@@ -105,14 +111,12 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
             }
         });
 
+        timer = new DateTimeBox();
+        timer.setMinuteStep(60);
+
+        startDateTime = new DateTimeBoxAppended();
         startDateTime.setFormat( settings.getCurrentDateTimeFormat().getDateTimeFormat() );
         startDateTime.setValue( new Date( logFormData.getStartTime() ) );
-        startDateTime.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                logFormData.setStartTime( startDateTime.getValue().getTime() );
-            }
-        });
     }
 
     public void setTimerTextValue( long diff ){
@@ -134,7 +138,8 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
     public void setLogsTable(){
         logsTableHandler.clear();
-        List<LogModel> LOGS = LogCollection.getInstance().getLogCollection();
+        logCollection.fetchAllLogs();
+        List<LogModel> LOGS = logCollection.getLogCollection();
 
         CellTable<LogModel> table = new CellTable<LogModel>();
         table.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.ENABLED);
@@ -143,8 +148,7 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
             @Override
             public String getValue(LogModel object) {
                 Date date = new Date( object.getStartTime() );
-                TimeZone tz = TimeZone.createTimeZone(0);
-                String formatter = DateTimeFormat.getFormat(  settings.getCurrentDateTimeFormat().getDateTimeFormatForDatepicker() ).format(date, tz);
+                String formatter = DateTimeFormat.getFormat(  settings.getCurrentDateTimeFormat().getDateTimeFormatForDatepicker() ).format(date);
                 return formatter;
             }
         };
@@ -206,15 +210,21 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
         logsTableHandler.add(table);
     }
 
-    public void displayNewLog( LogModel log ){
-        HTML panel = new HTML();
-    }
-
     public void clearForm(){
         startDateTime.setValue(new Date());
         title.setValue("");
         setTimerValue(0);
         description.setValue("");
+    }
+
+    @UiHandler("startDateTime")
+    public void onValueChange( ValueChangeEvent<Date> e ){
+        logFormData.setStartTime( e.getValue().getTime() );
+    }
+
+    @UiHandler("timer")
+    public void onValueChangeTimer( ValueChangeEvent<Date> e ){
+        logFormData.setDuration( timer.getValue().getTime() );
     }
 
     @UiHandler("addTimeLog")
@@ -228,9 +238,8 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
             description.getValue()
         );
 
-        displayNewLog(newLog);
         logFormData.removeDataFromStorage();
-        clearForm();
+        resetForm();
         setLogsTable();
     }
 
@@ -281,8 +290,13 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     }
 
     @UiHandler( "reset" )
-    public void onClickAnalytics( ClickEvent e ){
+    public void onClickReset( ClickEvent e ){
+        resetForm();
+    }
+
+    public void resetForm(){
         logFormData.removeDataFromStorage();
         clearForm();
+        startDateTime.setValue(new Date(), true);
     }
 }

@@ -1,14 +1,17 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
     <g:HTMLPanel>
         <div class="container">
-            <div class="row table" id="top-navigation-container">
-                <h1 class="col-md-2 col-height col-bottom">Tracker+</h1>
-                <nav class="col-md-10 col-height col-bottom">
+            <b:FluidRow>
+                <b:Column size="2">
+                    <b:Heading size="1">Tracker+</b:Heading>
+                </b:Column>
+                <b:Column size="10">
                     <g:SimplePanel ui:field="menu" />
-                </nav>
-            </div>
+                </b:Column>
+            </b:FluidRow>
             <g:SimplePanel ui:field="body" />
         </div>
     </g:HTMLPanel>
