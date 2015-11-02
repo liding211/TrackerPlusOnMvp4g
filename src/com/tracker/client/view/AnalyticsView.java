@@ -53,20 +53,31 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     @UiField
     NavLink graphIconPlaceholder;
 
+    @UiField
+    NavLink groupByDay;
+
+    @UiField
+    NavLink groupByWeek;
+
     private LogCollection logCollection;
     private SettingsModel settings;
+    private Integer groupType;
+    private ColumnChart chart;
+    private Table table;
+    private String selectedAnalyticDisplayType;
 
     @Override
     public void createView() {
         initWidget(uiBinder.createAndBindUi(this));
 
-        initialize();
-
         settings = SettingsModel.getInstance();
+        selectedAnalyticDisplayType = "table";
 
         logCollection = LogCollection.getInstance();
         logCollection.fetchAllLogs();
-        getTable();
+
+        initialize();
+        redraw();
     }
 
     public void initialize(){
@@ -75,7 +86,8 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
         tableIconAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getTable();
+                selectedAnalyticDisplayType = "table";
+                redraw();
             }
         });
 
@@ -84,21 +96,35 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
         graphIconAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getGraph();
+                selectedAnalyticDisplayType = "graph";
+                redraw();
             }
         });
+
+        groupType = GroupableLogCollection.GROUP_BY_DAY;
+
+        groupByDay = new NavLink();
+        groupByWeek = new NavLink();
+
+        groupByDay.setActive(true);
 
         tableIconPlaceholder.add(tableIconAnchor);
         graphIconPlaceholder.add(graphIconAnchor);
     }
 
-    private ColumnChart chart;
-    private Table table;
+    public void redraw(){
+        DataPlaceHolder.clear();
+        if( selectedAnalyticDisplayType == "table" ){
+            getTable();
+        }
+        if( selectedAnalyticDisplayType == "graph" ){
+            getGraph();
+        }
+    }
 
     private void getGraph() {
         graphIconPlaceholder.setActive(true);
         tableIconPlaceholder.setActive(false);
-        DataPlaceHolder.clear();
         ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
         chartLoader.loadApi(new Runnable() {
 
@@ -115,7 +141,6 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     private void getTable() {
         tableIconPlaceholder.setActive(true);
         graphIconPlaceholder.setActive(false);
-        DataPlaceHolder.clear();
         ChartLoader chartLoader = new ChartLoader(ChartPackage.TABLE);
         chartLoader.loadApi(new Runnable() {
 
@@ -131,7 +156,7 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
     private void drawGraph() {
         GroupableLogCollection logGroupedCollection = new GroupableLogCollection( logCollection.getLogCollection() );
-        logGroupedCollection.setGroupingByPeriod( GroupableLogCollection.GROUP_BY_DAY );
+        logGroupedCollection.setGroupingByPeriod( groupType );
         List<LogModel> dataCollection = logGroupedCollection.getGroupedCollection();
 
         int[] years = new int[] { 2003, 2004, 2005, 2006, 2007, 2008 };
@@ -173,7 +198,7 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
     private void drawTable() {
         GroupableLogCollection logGroupedCollection = new GroupableLogCollection( logCollection.getLogCollection() );
-        logGroupedCollection.setGroupingByPeriod( GroupableLogCollection.GROUP_BY_DAY );
+        logGroupedCollection.setGroupingByPeriod( groupType );
         List<LogModel> dataCollection = logGroupedCollection.getGroupedCollection();
 
         // Prepare the data
@@ -204,5 +229,21 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
         // Draw the chart
         table.draw(dataTable, options);
+    }
+
+    @UiHandler("groupByDay")
+    public void onClickGroupByDay( ClickEvent e ){
+        groupType = GroupableLogCollection.GROUP_BY_DAY;
+        groupByDay.setActive(true);
+        groupByWeek.setActive(false);
+        redraw();
+    }
+
+    @UiHandler("groupByWeek")
+    public void onClickGroupByWeek( ClickEvent e ){
+        groupType = GroupableLogCollection.GROUP_BY_WEEK;
+        groupByDay.setActive(false);
+        groupByWeek.setActive(true);
+        redraw();
     }
 }
