@@ -25,7 +25,7 @@
                         <g:HTMLPanel>
                             Period:
                             <b:NavPills>
-                                <b:NavLink ui:field="periodDay">7 days</b:NavLink>
+                                <b:NavLink ui:field="periodSevenDays">7 days</b:NavLink>
                                 <b:NavLink ui:field="periodMonth">Month</b:NavLink>
                                 <b:NavLink ui:field="periodThreeMonths">3 Months</b:NavLink>
                             </b:NavPills>

@@ -13,7 +13,7 @@ public class MenuPresenter extends BasePresenter<MenuPresenter.IMenuView, Tracke
     public interface IMenuView extends IsWidget {}
 
     public void onStart() {
-        eventBus.setMenu(view);
+        eventBus.setMenu( view );
     }
 
     @Override

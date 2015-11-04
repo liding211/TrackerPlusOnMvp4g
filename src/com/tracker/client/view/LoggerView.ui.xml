@@ -25,15 +25,8 @@
                                 <g:HTMLPanel>
                                     <form id="tracker-form" name="tracker-form">
                                         <b:Column size="3">
-                                            <g:HTMLPanel>
-                                                <b2:DateTimeBoxAppended
-                                                    ui:field="startDateTime"
-                                                    alternateSize="MEDIUM"
-                                                    autoClose="true"
-                                                    icon="CALENDAR"
-                                                    alignment="CENTER"/>
-                                                <b:HelpBlock>HelpInBlock</b:HelpBlock>
-                                            </g:HTMLPanel>
+                                            <g:HTMLPanel ui:field="startDateTimePlaceholder" />
+                                            <b:HelpBlock>HelpInBlock</b:HelpBlock>
                                         </b:Column>
                                         <b:Column size="3">
                                             <g:HTMLPanel>
@@ -43,13 +36,10 @@
                                         </b:Column>
                                         <b:Column size="3">
                                             <g:HTMLPanel>
-                                                <b:AppendButton ui:field="timerStartPanel">
-                                                    <b2:DateTimeBox ui:field="timer" format="HH:ii:ss" alternateSize="SMALL" alignment="CENTER" />
-                                                    <b:Button ui:field="startTimer" icon="PLAY" />
-                                                </b:AppendButton>
+                                                <b:AppendButton ui:field="timerStartPanel" />
                                                 <g:HTMLPanel ui:field="timerControlPanel" >
                                                     <b:Button ui:field="pauseTimer" icon="PAUSE" />
-                                                    <b:TextBox ui:field="timerText" alternateSize="SMALL" alignment="CENTER" enabled="false"/>
+                                                    <b:TextBox ui:field="textTimer" alternateSize="SMALL" alignment="CENTER" enabled="false"/>
                                                     <b:Button ui:field="stopTimer" icon="STOP" />
                                                 </g:HTMLPanel>
                                                 <b:HelpBlock>HelpInBlock</b:HelpBlock>

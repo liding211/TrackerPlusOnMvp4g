@@ -18,9 +18,12 @@ import java.util.Date;
 @Presenter(view = LoggerView.class)
 public class LoggerPresenter extends LazyPresenter<LoggerPresenter.ILoggerView, TrackerEventBus> implements ILoggerPresenter {
 
-    public interface ILoggerView extends IsWidget, LazyView {}
+    public interface ILoggerView extends IsWidget, LazyView {
+        public void resetView();
+    }
 
     public void onGoToLogger(){
+        view.resetView();
         eventBus.setBody( view );
     }
 }

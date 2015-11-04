@@ -4,6 +4,7 @@ import com.github.gwtbootstrap.client.ui.*;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.TextArea;
 import com.github.gwtbootstrap.client.ui.TextBox;
+import com.github.gwtbootstrap.client.ui.constants.AlternateSize;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.github.gwtbootstrap.datetimepicker.client.ui.DateTimeBox;
 import com.github.gwtbootstrap.datetimepicker.client.ui.DateTimeBoxAppended;
@@ -30,9 +31,6 @@ import com.tracker.client.model.SettingsModel;
 import com.tracker.client.presenter.ILoggerPresenter;
 import com.tracker.client.presenter.LoggerPresenter.ILoggerView;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     SubmitButton addTimeLog;
 
     @UiField
-    DateTimeBoxAppended startDateTime;
+    HTMLPanel startDateTimePlaceholder;
 
     @UiField
     TextBox title;
@@ -55,7 +53,7 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     TextArea description;
 
     @UiField
-    TextBox timerText;
+    TextBox textTimer;
 
     @UiField
     AppendButton timerStartPanel;
@@ -65,9 +63,6 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
     @UiField
     Button pauseTimer;
-
-    @UiField
-    DateTimeBox timer;
 
     @UiField
     Form logForm;
@@ -82,18 +77,29 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
     @Override
     public void createView() {
-        initWidget( uiBinder.createAndBindUi(this) );
 
         logFormData = LogFormDataModel.getInstance();
         settings = SettingsModel.getInstance();
         logCollection = LogCollection.getInstance();
 
+        initWidget( uiBinder.createAndBindUi(this) );
+
+        initialize();
+    }
+
+    public void initialize(){
+        setTrackingForm();
+        setLogsTable();
+    }
+
+    public void setTrackingForm(){
+
         timerControlPanel.addStyleName("input-append input-prepend");
         timerControlPanel.setVisible(false);
         timerStartPanel.setVisible(true);
 
-        setTimerValue(logFormData.getDuration());
-        setLogsTable();
+        setTimer( logFormData.getDuration() );
+        setStartDateTime( logFormData.getStartTime() );
 
         title.setValue(logFormData.getTitle());
         title.addBlurHandler( new BlurHandler() {
@@ -110,24 +116,72 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
                 logFormData.setDescription( description.getValue() );
             }
         });
-
-        timer = new DateTimeBox();
-        timer.setMinuteStep(60);
-
-        startDateTime = new DateTimeBoxAppended();
-        startDateTime.setFormat( settings.getCurrentDateTimeFormat().getDateTimeFormat() );
-        startDateTime.setValue( new Date( logFormData.getStartTime() ) );
     }
 
-    public void setTimerTextValue( long diff ){
+    public void setTextTimer( long diff ){
+
         Date date = new Date(diff);
         TimeZone tz = TimeZone.createTimeZone(0);
-        String formatter = DateTimeFormat.getFormat("HH:mm:ss").format(date, tz);
-        timerText.setText( formatter );
+        String formatter = DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getTimeFormat() ).format(date, tz);
+        textTimer.setText( formatter );
     }
 
-    public void setTimerValue( long timeStamp ){
+    public void setStartDateTime( long dateTimeStamp ){
+
+        DateTimeBoxAppended startDateTime = new DateTimeBoxAppended();
+
+        startDateTime.addValueChangeHandler(new ValueChangeHandler<Date>() {
+            @Override
+            public void onValueChange( ValueChangeEvent<Date> event ) {
+                LoggerView.this.logFormData.setStartTime( event.getValue().getTime() );
+            }
+        });
+
+        startDateTime.setIcon( IconType.CALENDAR );
+        startDateTime.setAlignment( ValueBoxBase.TextAlignment.CENTER );
+        startDateTime.setAutoClose(true);
+        startDateTime.setAlternateSize( AlternateSize.MEDIUM );
+        startDateTime.setFormat( settings.getCurrentDateTimeFormat().getDatepickerDateTimeFormat() );
+        startDateTime.setValue( new Date( dateTimeStamp ) );
+
+        startDateTimePlaceholder.clear();
+        startDateTimePlaceholder.add( startDateTime );
+    }
+
+    public void setTimer( long timeStamp ){
+
+        DateTimeBox timer = new DateTimeBox();
+
+        timer.addValueChangeHandler(new ValueChangeHandler<Date>() {
+            @Override
+            public void onValueChange( ValueChangeEvent<Date> event ) {
+                Long selectedTimeStamp = event.getValue().getTime();
+                int dayInMillis = 24 * 3600 * 1000;
+                //timer can get only 24h in max case
+                LoggerView.this.logFormData.setDuration(
+                    selectedTimeStamp % dayInMillis - getTimeZoneOffsetInMillis()
+                );
+            }
+        });
+
+        timer.setAlignment( ValueBoxBase.TextAlignment.CENTER );
+        timer.setAutoClose(true);
+        timer.setAlternateSize( AlternateSize.SMALL );
+        timer.setFormat( settings.getCurrentDateTimeFormat().getDatepickerTimeFormat() );
         timer.setValue( new Date( timeStamp + getTimeZoneOffsetInMillis() ) );
+
+        Button startTimerButton = new Button();
+        startTimerButton.setIcon(IconType.PLAY);
+        startTimerButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                LoggerView.this.onStartTimer( event );
+            }
+        });
+
+        timerStartPanel.clear();
+        timerStartPanel.add( timer );
+        timerStartPanel.add( startTimerButton );
     }
 
     public native int getTimeZoneOffsetInMillis() /*-{
@@ -137,6 +191,7 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     }-*/;
 
     public void setLogsTable(){
+
         logsTableHandler.clear();
         logCollection.fetchAllLogs();
         List<LogModel> LOGS = logCollection.getLogCollection();
@@ -148,17 +203,21 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
             @Override
             public String getValue(LogModel object) {
                 Date date = new Date( object.getStartTime() );
-                String formatter = DateTimeFormat.getFormat(  settings.getCurrentDateTimeFormat().getDateTimeFormatForDatepicker() ).format(date);
+                String formatter = DateTimeFormat
+                    .getFormat(settings.getCurrentDateTimeFormat().getDateTimeFormat())
+                    .format(date);
                 return formatter;
             }
         };
 
-        TextColumn<LogModel> duratiornColumn = new TextColumn<LogModel>() {
+        TextColumn<LogModel> durationColumn = new TextColumn<LogModel>() {
             @Override
             public String getValue(LogModel object) {
                 Date date = new Date( object.getDuration() );
                 TimeZone tz = TimeZone.createTimeZone(0);
-                String formatter = DateTimeFormat.getFormat(  settings.getCurrentDateTimeFormat().getTimeFormat() ).format(date, tz);
+                String formatter = DateTimeFormat
+                    .getFormat( settings.getCurrentDateTimeFormat().getTimeFormat() )
+                    .format(date, tz);
                 return formatter;
             }
         };
@@ -179,12 +238,12 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
         table.addColumn(startDateTimeColumn, "Start time");
         table.addColumn(titleColumn, "Title");
-        table.addColumn(duratiornColumn, "Time spent");
+        table.addColumn(durationColumn, "Time spent");
         table.addColumn(descriptionColumn, "Address");
 
         table.setColumnWidth(startDateTimeColumn, 25, Style.Unit.PCT);
         table.setColumnWidth(titleColumn, 25, Style.Unit.PCT);
-        table.setColumnWidth(duratiornColumn, 25, Style.Unit.PCT);
+        table.setColumnWidth(durationColumn, 25, Style.Unit.PCT);
         table.setColumnWidth(descriptionColumn, 25, Style.Unit.PCT);
 
         // Add a selection model to handle user selection.
@@ -211,65 +270,56 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     }
 
     public void clearForm(){
-        startDateTime.setValue(new Date());
+        setStartDateTime(new Date().getTime());
         title.setValue("");
-        setTimerValue(0);
+        setTimer(0);
         description.setValue("");
     }
 
-    @UiHandler("startDateTime")
-    public void onValueChange( ValueChangeEvent<Date> e ){
-        logFormData.setStartTime( e.getValue().getTime() );
-    }
-
-    @UiHandler("timer")
-    public void onValueChangeTimer( ValueChangeEvent<Date> e ){
-        logFormData.setDuration( timer.getValue().getTime() );
-    }
-
-    @UiHandler("addTimeLog")
-    public void onAddTimeLog( ClickEvent e ){
-//        filterFormData();
-
-        LogModel newLog = new LogModel(
-            logFormData.getStartTime(),
-            logFormData.getDuration(),
-            title.getValue(),
-            description.getValue()
-        );
-
-        logFormData.removeDataFromStorage();
-        resetForm();
-        setLogsTable();
-    }
-
-    @UiHandler( "startTimer" )
     public void onStartTimer( ClickEvent e ){
+
         timerStartPanel.setVisible(false);
         timerControlPanel.setVisible(true);
 
         logFormData.setDuration( new Long(0) );
         logFormData.setStartTime( System.currentTimeMillis() );
 
-        setTimerValue( logFormData.getStartTime() );
-        startDateTime.setValue( new Date( logFormData.getStartTime() ) );
+        setTimer( logFormData.getStartTime() );
+        setStartDateTime(logFormData.getStartTime());
 
         this.timerHandler = new Timer(){
             @Override
             public void run() {
                 LoggerView.this.logFormData.setDuration( LoggerView.this.logFormData.getDuration() + 1000 );
                 int timeDuration = LoggerView.this.logFormData.getDuration().intValue();
-                LoggerView.this.setTimerTextValue(timeDuration);
+                LoggerView.this.setTextTimer(timeDuration);
             }
         };
         timerHandler.scheduleRepeating(1000);
-        setTimerTextValue(0);
+        setTextTimer(0);
+    }
+
+    @UiHandler("addTimeLog")
+    public void onAddTimeLog( ClickEvent e ){
+//        filterFormData();
+
+        new LogModel(
+            logFormData.getStartTime(),
+            logFormData.getDuration(),
+            title.getValue(),
+            description.getValue()
+        );
+
+        resetForm();
+        setLogsTable();
+        logFormData.clear();
     }
 
     @UiHandler("stopTimer")
     public void onStopTimer( ClickEvent e ){
+
         logFormData.saveDataToStorage();
-        setTimerValue(logFormData.getDuration());
+        setTimer(logFormData.getDuration());
 
         timerStartPanel.setVisible(true);
         timerControlPanel.setVisible(false);
@@ -280,6 +330,7 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
     @UiHandler( "pauseTimer" )
     public void onPauseTimer( ClickEvent e ){
+
         if(timerHandler.isRunning()) {
             pauseTimer.setIcon(IconType.PLAY);
             timerHandler.cancel();
@@ -295,8 +346,14 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     }
 
     public void resetForm(){
-        logFormData.removeDataFromStorage();
+        logFormData.clear();
         clearForm();
-        startDateTime.setValue(new Date(), true);
+        setStartDateTime( new Date().getTime() );
+    }
+
+    public void resetView(){
+        setLogsTable();
+        setStartDateTime( logFormData.getStartTime());
+        setTimer(logFormData.getDuration() );
     }
 }

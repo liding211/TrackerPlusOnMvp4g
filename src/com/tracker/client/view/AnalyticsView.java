@@ -1,6 +1,7 @@
 package com.tracker.client.view;
 
 import com.github.gwtbootstrap.client.ui.Icon;
+import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.base.IconAnchor;
@@ -16,8 +17,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.charts.client.table.Table;
 import com.googlecode.gwt.charts.client.table.TableOptions;
-import com.googlecode.gwt.charts.client.util.ChartHelper;
-import com.tracker.client.model.GroupableLogCollection;
 import com.tracker.client.model.LogCollection;
 import com.tracker.client.model.LogModel;
 import com.tracker.client.model.SettingsModel;
@@ -59,12 +58,24 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     @UiField
     NavLink groupByWeek;
 
+    @UiField
+    NavLink periodSevenDays;
+
+    @UiField
+    NavLink periodMonth;
+
+    @UiField
+    NavLink periodThreeMonths;
+
     private LogCollection logCollection;
     private SettingsModel settings;
     private Integer groupType;
     private ColumnChart chart;
     private Table table;
     private String selectedAnalyticDisplayType;
+    private List<LogModel> dataCollection;
+    private Long selectedPeriod;
+    private String selectedGroupType;
 
     @Override
     public void createView() {
@@ -101,11 +112,11 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
             }
         });
 
-        groupType = GroupableLogCollection.GROUP_BY_DAY;
-
         groupByDay = new NavLink();
         groupByWeek = new NavLink();
 
+        selectedPeriod = LogCollection.PERIOD_SEVEN_DAYS;
+        selectedGroupType = LogCollection.GROUP_BY_DAY_PATTERN;
         groupByDay.setActive(true);
 
         tableIconPlaceholder.add(tableIconAnchor);
@@ -113,6 +124,14 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     }
 
     public void redraw(){
+
+        dataCollection = LogCollection.getGroupCollectionByPattern(
+                LogCollection.getCollectionByPeriod(
+                        logCollection.getLogCollection(),
+                        selectedPeriod
+                ),
+                selectedGroupType
+        );
         DataPlaceHolder.clear();
         if( selectedAnalyticDisplayType == "table" ){
             getTable();
@@ -155,12 +174,6 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     }
 
     private void drawGraph() {
-        GroupableLogCollection logGroupedCollection = new GroupableLogCollection( logCollection.getLogCollection() );
-        logGroupedCollection.setGroupingByPeriod( groupType );
-        List<LogModel> dataCollection = logGroupedCollection.getGroupedCollection();
-
-        int[] years = new int[] { 2003, 2004, 2005, 2006, 2007, 2008 };
-        int[] values = new int[]{ 1336060, 1538156, 1576579, 1600652, 1968113, 1901067 };
 
         // Prepare the data
         DataTable dataTable = DataTable.create();
@@ -197,9 +210,6 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     }
 
     private void drawTable() {
-        GroupableLogCollection logGroupedCollection = new GroupableLogCollection( logCollection.getLogCollection() );
-        logGroupedCollection.setGroupingByPeriod( groupType );
-        List<LogModel> dataCollection = logGroupedCollection.getGroupedCollection();
 
         // Prepare the data
         DataTable dataTable = DataTable.create();
@@ -233,7 +243,7 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
     @UiHandler("groupByDay")
     public void onClickGroupByDay( ClickEvent e ){
-        groupType = GroupableLogCollection.GROUP_BY_DAY;
+        selectedGroupType = LogCollection.GROUP_BY_DAY_PATTERN;
         groupByDay.setActive(true);
         groupByWeek.setActive(false);
         redraw();
@@ -241,9 +251,40 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
     @UiHandler("groupByWeek")
     public void onClickGroupByWeek( ClickEvent e ){
-        groupType = GroupableLogCollection.GROUP_BY_WEEK;
+        selectedGroupType = LogCollection.GROUP_BY_WEEK_PATTERN;
         groupByDay.setActive(false);
         groupByWeek.setActive(true);
+        redraw();
+    }
+
+    @UiHandler("periodSevenDays")
+    public void onClickPeriodSevenDays( ClickEvent e ){
+        selectedPeriod = LogCollection.PERIOD_SEVEN_DAYS;
+        periodSevenDays.setActive(true);
+        periodMonth.setActive(false);
+        periodThreeMonths.setActive(false);
+        redraw();
+    }
+
+    @UiHandler("periodMonth")
+    public void onClickPeriodMonth( ClickEvent e ){
+        selectedPeriod = LogCollection.PERIOD_ONE_MONTH;
+        periodSevenDays.setActive(false);
+        periodMonth.setActive(true);
+        periodThreeMonths.setActive(false);
+        redraw();
+    }
+
+    @UiHandler("periodThreeMonths")
+    public void onClickPeriodThreeMonths( ClickEvent e ){
+        selectedPeriod = LogCollection.PERIOD_THREE_MONTHS;
+        periodSevenDays.setActive(false);
+        periodMonth.setActive(false);
+        periodThreeMonths.setActive(true);
+        redraw();
+    }
+
+    public void resetView(){
         redraw();
     }
 }

@@ -25,10 +25,7 @@ public class LogFormDataModel {
 
     private LogFormDataModel(){
         tableNameInLocalStorage = "TrackerLoggerFormData";
-        startTime = new Date().getTime();
-        duration = new Long(0);
-        title = "";
-        description = "";
+        setBaseData();
         fetchDataFromStorage();
     }
 
@@ -64,12 +61,6 @@ public class LogFormDataModel {
         return this.description;
     }
 
-    public void removeDataFromStorage(){
-        if(localStorage != null) {
-            localStorage.removeItem(tableNameInLocalStorage);
-        }
-    }
-
     public void fetchDataFromStorage(){
         if(localStorage != null){
             if(localStorage.getItem(tableNameInLocalStorage) != null) {
@@ -91,6 +82,24 @@ public class LogFormDataModel {
             jsonObject.put("title", new JSONString(title));
             jsonObject.put("description", new JSONString(description));
             localStorage.setItem(tableNameInLocalStorage, jsonObject.toString());
+        }
+    }
+
+    public void clear(){
+        setBaseData();
+        removeDataFromStorage();
+    }
+
+    private void setBaseData(){
+        startTime = new Date().getTime();
+        duration = new Long(0);
+        title = "";
+        description = "";
+    };
+
+    private void removeDataFromStorage(){
+        if(localStorage != null) {
+            localStorage.removeItem(tableNameInLocalStorage);
         }
     }
 }

@@ -5,9 +5,10 @@ public class LocaleDateTimeFormat {
     private String name;
     private String dateTimeFormat;
     private String dateFormat;
+    private String datepickerTimeFormat;
+    private String datepickerDateTimeFormat;
     private String timeFormat;
     private String example;
-    private String dateTimeFormatForDatepicker;
     private String dateFormatForAnalytics;
 
     public void setLocalName(String localName) { this.localName = localName; };
@@ -16,13 +17,15 @@ public class LocaleDateTimeFormat {
 
     public void setDateTimeFormat(String dateTimeFormat) { this.dateTimeFormat = dateTimeFormat; };
 
-    public void setDateTimeFormatForDatepicker(String dateTimeFormatForDatepicker) { this.dateTimeFormatForDatepicker = dateTimeFormatForDatepicker; };
-
     public void setDateFormatForAnalytics(String dateFormatForAnalytics) { this.dateFormatForAnalytics = dateFormatForAnalytics; };
 
     public void setDateFormat(String dateFormat) { this.dateFormat = dateFormat; };
 
     public void setTimeFormat(String timeFormat) { this.timeFormat = timeFormat; };
+
+    public void setDatepickerDateTimeFormat(String datepickerDateTimeFormat) { this.datepickerDateTimeFormat = datepickerDateTimeFormat; };
+
+    public void setDatepickerTimeFormat(String datepickerTimeFormat) { this.datepickerTimeFormat = datepickerTimeFormat; };
 
     public void setExample(String example) { this.example = example; };
 
@@ -32,13 +35,15 @@ public class LocaleDateTimeFormat {
 
     public String getDateTimeFormat() { return this.dateTimeFormat; };
 
-    public String getDateTimeFormatForDatepicker() { return this.dateTimeFormatForDatepicker; };
-
     public String getDateFormatForAnalytics() { return this.dateFormatForAnalytics; };
 
     public String getDateFormat() { return this.dateFormat; };
 
     public String getTimeFormat() { return this.timeFormat; };
+
+    public String getDatepickerDateTimeFormat() { return this.datepickerDateTimeFormat; };
+
+    public String getDatepickerTimeFormat() { return this.datepickerTimeFormat; };
 
     public String getExample() { return this.example; };
 
