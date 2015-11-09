@@ -25,30 +25,31 @@
                                 <g:HTMLPanel>
                                     <form id="tracker-form" name="tracker-form">
                                         <b:Column size="3">
-                                            <g:HTMLPanel ui:field="startDateTimePlaceholder" />
-                                            <b:HelpBlock>HelpInBlock</b:HelpBlock>
-                                        </b:Column>
-                                        <b:Column size="3">
-                                            <g:HTMLPanel>
-                                                <b:TextBox ui:field="title"/>
-                                                <b:HelpBlock>HelpInBlock</b:HelpBlock>
+                                            <g:HTMLPanel ui:field="startDateBox">
+                                                <g:HTMLPanel ui:field="startDateTimePlaceholder" />
+                                                <b:HelpBlock ui:field="startDateTimeErrorBlock" />
                                             </g:HTMLPanel>
                                         </b:Column>
                                         <b:Column size="3">
-                                            <g:HTMLPanel>
+                                            <g:HTMLPanel ui:field="titleBox">
+                                                <b:TextBox ui:field="title"/>
+                                                <b:HelpBlock ui:field="titleErrorBlock" />
+                                            </g:HTMLPanel>
+                                        </b:Column>
+                                        <b:Column size="3">
+                                            <g:HTMLPanel ui:field="timerBox">
                                                 <b:AppendButton ui:field="timerStartPanel" />
                                                 <g:HTMLPanel ui:field="timerControlPanel" >
                                                     <b:Button ui:field="pauseTimer" icon="PAUSE" />
                                                     <b:TextBox ui:field="textTimer" alternateSize="SMALL" alignment="CENTER" enabled="false"/>
                                                     <b:Button ui:field="stopTimer" icon="STOP" />
                                                 </g:HTMLPanel>
-                                                <b:HelpBlock>HelpInBlock</b:HelpBlock>
+                                                <b:HelpBlock ui:field="timerErrorBlock" />
                                             </g:HTMLPanel>
                                         </b:Column>
                                         <b:Column size="3">
                                             <g:HTMLPanel>
                                                 <b:TextArea ui:field="description"/>
-                                                <span class="help-block hidden"></span>
                                             </g:HTMLPanel>
                                         </b:Column>
                                     </form>
@@ -60,27 +61,6 @@
                 <div>
                     <h3>Time Log</h3>
                     <g:VerticalPanel ui:field="logsTableHandler"></g:VerticalPanel>
-                    <!--<table class="time-log-table">-->
-                        <!--<thead id="log-list-header">-->
-                            <!--<tr>-->
-                                <!--<th class="th-start-time" data-sort="startTime">Start time<span class="sort-type"></span></th>-->
-                                <!--<th class="th-title" data-sort="title">Name<span class="sort-type"></span></th>-->
-                                <!--<th class="th-duration" data-sort="duration">Time spent<span class="sort-type"></span></th>-->
-                                <!--<th class="th-description">Description</th>-->
-                                <!--<th>&nbsp;</th>-->
-                            <!--</tr>-->
-                        <!--</thead>-->
-                        <!--<tbody id="list-of-tracker-logs"></tbody>-->
-                        <!--<tfoot>-->
-                            <!--<tr>-->
-                                <!--<td>&nbsp;</td>-->
-                                <!--<td>&nbsp;</td>-->
-                                <!--<td>&nbsp;</td>-->
-                                <!--<td>&nbsp;</td>-->
-                                <!--<td>&nbsp;</td>-->
-                            <!--</tr>-->
-                        <!--</tfoot>-->
-                    <!--</table>-->
                 </div>
             </div>
         </g:HTMLPanel>

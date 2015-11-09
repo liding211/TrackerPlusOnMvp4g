@@ -8,6 +8,7 @@ import com.github.gwtbootstrap.client.ui.constants.AlternateSize;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.github.gwtbootstrap.datetimepicker.client.ui.DateTimeBox;
 import com.github.gwtbootstrap.datetimepicker.client.ui.DateTimeBoxAppended;
+import com.github.gwtbootstrap.datetimepicker.client.ui.base.HasViewMode;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
@@ -62,6 +63,15 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     HTMLPanel timerControlPanel;
 
     @UiField
+    HTMLPanel startDateBox;
+
+    @UiField
+    HTMLPanel titleBox;
+
+    @UiField
+    HTMLPanel timerBox;
+
+    @UiField
     Button pauseTimer;
 
     @UiField
@@ -69,6 +79,15 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
     @UiField
     VerticalPanel logsTableHandler;
+
+    @UiField
+    HelpBlock startDateTimeErrorBlock;
+
+    @UiField
+    HelpBlock titleErrorBlock;
+
+    @UiField
+    HelpBlock timerErrorBlock;
 
     private Timer timerHandler;
     private LogFormDataModel logFormData;
@@ -93,6 +112,10 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     }
 
     public void setTrackingForm(){
+
+        startDateTimeErrorBlock.setVisible(false);
+        titleErrorBlock.setVisible(false);
+        timerErrorBlock.setVisible(false);
 
         timerControlPanel.addStyleName("input-append input-prepend");
         timerControlPanel.setVisible(false);
@@ -156,19 +179,22 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
             @Override
             public void onValueChange( ValueChangeEvent<Date> event ) {
                 Long selectedTimeStamp = event.getValue().getTime();
-                int dayInMillis = 24 * 3600 * 1000;
+                Integer dayInMillis = 24 * 60 * 60 * 1000;
                 //timer can get only 24h in max case
                 LoggerView.this.logFormData.setDuration(
-                    selectedTimeStamp % dayInMillis - getTimeZoneOffsetInMillis()
+                    ( ( selectedTimeStamp + getTimeZoneOffsetInMillis() ) % dayInMillis )
                 );
             }
         });
 
         timer.setAlignment( ValueBoxBase.TextAlignment.CENTER );
+        timer.setStartView(HasViewMode.ViewMode.HOUR);
+        timer.setMinView(HasViewMode.ViewMode.HOUR);
+//        timer.setMinuteStep(1);
         timer.setAutoClose(true);
         timer.setAlternateSize( AlternateSize.SMALL );
         timer.setFormat( settings.getCurrentDateTimeFormat().getDatepickerTimeFormat() );
-        timer.setValue( new Date( timeStamp + getTimeZoneOffsetInMillis() ) );
+        timer.setValue( new Date( timeStamp - getTimeZoneOffsetInMillis() ) );
 
         Button startTimerButton = new Button();
         startTimerButton.setIcon(IconType.PLAY);
@@ -187,7 +213,7 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
     public native int getTimeZoneOffsetInMillis() /*-{
         var x = new Date();
         var currentTimeZoneOffsetInMillis = x.getTimezoneOffset() * 60 * 1000;
-        return currentTimeZoneOffsetInMillis;
+        return -currentTimeZoneOffsetInMillis;
     }-*/;
 
     public void setLogsTable(){
@@ -278,6 +304,9 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
 
     public void onStartTimer( ClickEvent e ){
 
+        timerBox.removeStyleName("control-group error");
+        timerErrorBlock.setVisible(false);
+
         timerStartPanel.setVisible(false);
         timerControlPanel.setVisible(true);
 
@@ -299,20 +328,95 @@ public class LoggerView extends ReverseCompositeView<ILoggerPresenter> implement
         setTextTimer(0);
     }
 
+    public int validateStartTime(){
+
+        int isFailed = 0;
+
+        if( logFormData.getStartTime() == 0){
+            isFailed = 1;
+            startDateBox.addStyleName("control-group error");
+            startDateTimeErrorBlock.setVisible(true);
+            startDateTimeErrorBlock.setText("Invalid start date");
+        } else {
+            startDateBox.removeStyleName("control-group error");
+            startDateTimeErrorBlock.setVisible(false);
+        }
+
+        return isFailed;
+    }
+
+    public int validateTitle(){
+
+        int isFailed = 0;
+        int maxLength = 40;
+
+        if( logFormData.getTitle().isEmpty() ){
+            isFailed = 1;
+            titleBox.addStyleName("control-group error");
+            titleErrorBlock.setVisible(true);
+            titleErrorBlock.setText("Title is empty");
+        }
+        if( logFormData.getTitle().length() > maxLength ){
+            isFailed = 1;
+            titleBox.addStyleName("control-group error");
+            titleErrorBlock.setVisible(true);
+            titleErrorBlock.setText("Title has to many character (" + maxLength + " max)");
+        }
+
+        if( isFailed == 0 ) {
+            titleBox.removeStyleName("control-group error");
+            titleErrorBlock.setVisible(false);
+        }
+
+        return isFailed;
+    }
+
+    public int validateDuration(){
+
+        int isFailed = 0;
+        int secondInMillis = 1000;
+
+        if( logFormData.getDuration() < secondInMillis ){
+            isFailed = 1;
+            timerBox.addStyleName("control-group error");
+            timerErrorBlock.setVisible(true);
+            timerErrorBlock.setText("Timer cannot be empty");
+        } else {
+            timerBox.removeStyleName("control-group error");
+            timerErrorBlock.setVisible(false);
+        }
+
+        return isFailed;
+    }
+
+    public boolean validateFormData(){
+        Integer countFailedValidation = 0;
+        countFailedValidation += validateStartTime();
+        countFailedValidation += validateTitle();
+        countFailedValidation += validateDuration();
+        return ( countFailedValidation == 0 );
+    }
+
+    @UiHandler("title")
+    public void onValueChangeTitle( ValueChangeEvent<String> e ){
+        logFormData.setTitle( e.getValue() );
+        validateTitle();
+    }
+
     @UiHandler("addTimeLog")
     public void onAddTimeLog( ClickEvent e ){
-//        filterFormData();
+        if( validateFormData() ){
+            new LogModel(
+                logFormData.getStartTime(),
+                logFormData.getDuration(),
+                title.getValue(),
+                description.getValue()
+            );
 
-        new LogModel(
-            logFormData.getStartTime(),
-            logFormData.getDuration(),
-            title.getValue(),
-            description.getValue()
-        );
-
-        resetForm();
-        setLogsTable();
-        logFormData.clear();
+            resetForm();
+            setLogsTable();
+            logFormData.clear();
+        }
     }
 
     @UiHandler("stopTimer")

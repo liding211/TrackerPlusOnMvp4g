@@ -32,23 +32,25 @@ public class SettingsModel {
         EnglandDateTimeFormat.setDateFormat("dd/mm/yyyy");
         EnglandDateTimeFormat.setDateFormatForAnalytics("dd/MM/yyyy");
         EnglandDateTimeFormat.setDatepickerDateTimeFormat("dd/mm/yyyy hh:ii");
-        EnglandDateTimeFormat.setDatepickerTimeFormat("HH:ii:ss");
+        EnglandDateTimeFormat.setDatepickerTimeFormat("hh:ii:ss");
         EnglandDateTimeFormat.setDateTimeFormat("dd/MM/yyyy hh:mm a");
         EnglandDateTimeFormat.setExample("18/09/2015 12:05");
         EnglandDateTimeFormat.setLocalName("en");
         EnglandDateTimeFormat.setName("England");
         EnglandDateTimeFormat.setTimeFormat("HH:mm:ss");
+        EnglandDateTimeFormat.setTimeDelimiter(":");
 
         LocaleDateTimeFormat SwedenDateTimeFormat = new LocaleDateTimeFormat();
         SwedenDateTimeFormat.setDateFormat("yyyy-mm-dd");
         SwedenDateTimeFormat.setDateFormatForAnalytics("yyyy-MM-dd");
         SwedenDateTimeFormat.setDatepickerDateTimeFormat("yyyy-mm-dd hh.ii");
-        SwedenDateTimeFormat.setDatepickerTimeFormat("HH.ii.ss");
+        SwedenDateTimeFormat.setDatepickerTimeFormat("hh.ii.ss");
         SwedenDateTimeFormat.setDateTimeFormat("yyyy-MM-dd HH.mm");
         SwedenDateTimeFormat.setExample("2015-09-18 15.59");
         SwedenDateTimeFormat.setLocalName("se");
         SwedenDateTimeFormat.setName("Sweden");
         SwedenDateTimeFormat.setTimeFormat("HH.mm.ss");
+        SwedenDateTimeFormat.setTimeDelimiter(".");
 
         availableDateTimeFormat.put("England", EnglandDateTimeFormat);
         availableDateTimeFormat.put("Sweden", SwedenDateTimeFormat);

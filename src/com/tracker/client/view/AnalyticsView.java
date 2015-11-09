@@ -14,9 +14,11 @@ import com.google.gwt.i18n.client.TimeZone;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.charts.client.table.Table;
 import com.googlecode.gwt.charts.client.table.TableOptions;
+import com.tracker.client.TimeHelper;
 import com.tracker.client.model.LogCollection;
 import com.tracker.client.model.LogModel;
 import com.tracker.client.model.SettingsModel;
@@ -69,7 +71,6 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
     private LogCollection logCollection;
     private SettingsModel settings;
-    private Integer groupType;
     private ColumnChart chart;
     private Table table;
     private String selectedAnalyticDisplayType;
@@ -107,16 +108,14 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
         graphIconAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                selectedAnalyticDisplayType = "graph";
-                redraw();
+            selectedAnalyticDisplayType = "graph";
+            redraw();
             }
         });
 
-        groupByDay = new NavLink();
-        groupByWeek = new NavLink();
-
         selectedPeriod = LogCollection.PERIOD_SEVEN_DAYS;
         selectedGroupType = LogCollection.GROUP_BY_DAY_PATTERN;
+        periodSevenDays.setActive(true);
         groupByDay.setActive(true);
 
         tableIconPlaceholder.add(tableIconAnchor);
@@ -126,11 +125,11 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     public void redraw(){
 
         dataCollection = LogCollection.getGroupCollectionByPattern(
-                LogCollection.getCollectionByPeriod(
-                        logCollection.getLogCollection(),
-                        selectedPeriod
-                ),
-                selectedGroupType
+            LogCollection.getCollectionByPeriod(
+                logCollection.getLogCollection(),
+                selectedPeriod
+            ),
+            selectedGroupType
         );
         DataPlaceHolder.clear();
         if( selectedAnalyticDisplayType == "table" ){
@@ -186,8 +185,11 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
         for(int i = 0; i < dataCollection.size(); i++){
             dataTable.setCell(
                     i, 0,
-                    DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
+                    selectedGroupType == LogCollection.GROUP_BY_DAY_PATTERN ?
+                        DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
                             .format( new Date(dataCollection.get(i).getStartTime()) )
+                        : TimeHelper.getWeekRangeTitleByDate( dataCollection.get(i).getStartTime(), settings )
+
             );
 
             Date duration = new Date(dataCollection.get(i).getDuration());
@@ -223,13 +225,9 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
                     .format( new Date(dataCollection.get(i).getStartTime()) )
             );
 
-            Date duration = new Date(dataCollection.get(i).getDuration());
-            TimeZone tz = TimeZone.createTimeZone(0);
-
             dataTable.setCell(
                 i, 1, dataCollection.get(i).getDuration(),
-                DateTimeFormat.getFormat(settings.getCurrentDateTimeFormat().getTimeFormat())
-                    .format( duration, tz )
+                TimeHelper.getTimeByTimeStamp( dataCollection.get(i).getDuration(), settings )
             );
         }
 

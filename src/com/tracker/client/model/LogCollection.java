@@ -119,9 +119,7 @@ public class LogCollection {
                 tempCollection.put( date, tempLog);
             }
 
-            SortedSet<String> keys = new TreeSet<String>(tempCollection.keySet());
-
-            for (String key : keys) {
+            for (String key : tempCollection.keySet()) {
                 collection.add( tempCollection.get(key) );
             }
         }
