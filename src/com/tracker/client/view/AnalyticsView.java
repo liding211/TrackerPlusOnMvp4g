@@ -184,11 +184,11 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
         for(int i = 0; i < dataCollection.size(); i++){
             dataTable.setCell(
-                    i, 0,
-                    selectedGroupType == LogCollection.GROUP_BY_DAY_PATTERN ?
-                        DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
-                            .format( new Date(dataCollection.get(i).getStartTime()) )
-                        : TimeHelper.getWeekRangeTitleByDate( dataCollection.get(i).getStartTime(), settings )
+                i, 0,
+                selectedGroupType == LogCollection.GROUP_BY_DAY_PATTERN ?
+                    DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
+                        .format(new Date(dataCollection.get(i).getStartTime()))
+                    : TimeHelper.getWeekRangeTitleByDate( dataCollection.get(i).getStartTime(), settings )
 
             );
 
@@ -196,7 +196,8 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
             TimeZone tz = TimeZone.createTimeZone(0);
 
             dataTable.setCell(
-                    i, 1, dataCollection.get(i).getDuration()
+                    i, 1, dataCollection.get(i).getDuration(),
+                    TimeHelper.getTimeByTimeStamp( dataCollection.get(i).getDuration(), settings )
             );
         }
 
@@ -221,8 +222,10 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
         for(int i = 0; i < dataCollection.size(); i++){
             dataTable.setCell(
                 i, 0, dataCollection.get(i).getStartTime(),
-                DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
-                    .format( new Date(dataCollection.get(i).getStartTime()) )
+                selectedGroupType == LogCollection.GROUP_BY_DAY_PATTERN ?
+                    DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
+                        .format(new Date(dataCollection.get(i).getStartTime()))
+                    : TimeHelper.getWeekRangeTitleByDate( dataCollection.get(i).getStartTime(), settings )
             );
 
             dataTable.setCell(

@@ -38,7 +38,7 @@ public abstract class TimeHelper {
     public static String getWeekRangeTitleByDate( Long timeStamp, SettingsModel settings ){
 
         int dayInMillis = 24 * 60 * 60 * 1000;
-        int daysInWeek = 7;
+        int daysInWeek = 6; // 0 - is first day of week
 
         Date currentDay = new Date( timeStamp - (timeStamp % dayInMillis));
 
@@ -48,13 +48,16 @@ public abstract class TimeHelper {
 
         Date startDate = new Date( ( timeStamp - dayInMillis * dayOfWeek ) - ( timeStamp % dayInMillis ));
         Date endDate = new Date( startDate.getTime() + dayInMillis * daysInWeek );
+        Date startDateOfCurrentWeek = new Date( ( new Date().getTime() - dayInMillis * dayOfWeek ) - ( new Date().getTime() % dayInMillis ));
 
         String startDateString = DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
                 .format( startDate );
         String endDateString = DateTimeFormat.getFormat( settings.getCurrentDateTimeFormat().getDateFormatForAnalytics() )
                 .format( endDate );
         String dateRange = startDateString + " - " + endDateString;
-
+        if (startDateOfCurrentWeek.getTime() == startDate.getTime()) {
+            dateRange += "*";
+        }
         return dateRange;
     }
 }
