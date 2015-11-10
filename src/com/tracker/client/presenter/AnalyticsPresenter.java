@@ -1,5 +1,6 @@
 package com.tracker.client.presenter;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.mvp4g.client.annotation.Presenter;
 import com.mvp4g.client.presenter.LazyPresenter;
@@ -19,5 +20,4 @@ public class AnalyticsPresenter extends LazyPresenter<AnalyticsPresenter.IAnalyt
         view.resetView();
         eventBus.setBody( view );
     }
-
 }

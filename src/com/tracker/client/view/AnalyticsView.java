@@ -14,10 +14,12 @@ import com.google.gwt.i18n.client.TimeZone;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.charts.client.table.Table;
 import com.googlecode.gwt.charts.client.table.TableOptions;
+import com.mvp4g.client.annotation.Presenter;
 import com.tracker.client.TimeHelper;
 import com.tracker.client.model.LogCollection;
 import com.tracker.client.model.LogModel;
@@ -192,8 +194,8 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
             );
 
-            Date duration = new Date(dataCollection.get(i).getDuration());
-            TimeZone tz = TimeZone.createTimeZone(0);
+//            Date duration = new Date(dataCollection.get(i).getDuration());
+//            TimeZone tz = TimeZone.createTimeZone(0);
 
             dataTable.setCell(
                     i, 1, dataCollection.get(i).getDuration(),

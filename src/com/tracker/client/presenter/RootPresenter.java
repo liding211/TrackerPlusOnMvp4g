@@ -18,7 +18,7 @@ public class RootPresenter extends BasePresenter<RootPresenter.IRootView, Tracke
 
     }
 
-    public void onStart() {
+    public void onInit() {
         eventBus.goToLogger();
     }
 
