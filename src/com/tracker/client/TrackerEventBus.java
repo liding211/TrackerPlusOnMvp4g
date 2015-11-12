@@ -1,10 +1,7 @@
 package com.tracker.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.mvp4g.client.annotation.Event;
-import com.mvp4g.client.annotation.Events;
-import com.mvp4g.client.annotation.InitHistory;
-import com.mvp4g.client.annotation.Start;
+import com.mvp4g.client.annotation.*;
 import com.mvp4g.client.event.EventBusWithLookup;
 import com.tracker.client.presenter.MenuPresenter;
 import com.tracker.client.presenter.LoggerPresenter;
@@ -35,18 +32,18 @@ public interface TrackerEventBus extends EventBusWithLookup {
     /*
      * Logger events
      */
-    @Event( handlers = LoggerPresenter.class, historyConverter = TrackerHistoryConverter.class, name = "tracker" )
-    void goToLogger();
+    @Event( handlers = {LoggerPresenter.class, MenuPresenter.class}, historyConverter = TrackerHistoryConverter.class, name = "tracker" )
+    String goToLogger();
 
     /*
      * Analytics events
      */
-    @Event( handlers = AnalyticsPresenter.class, historyConverter = TrackerHistoryConverter.class, name = "analytics" )
-    void goToAnalytics();
+    @Event( handlers = {AnalyticsPresenter.class, MenuPresenter.class}, historyConverter = TrackerHistoryConverter.class, name = "analytics" )
+    String goToAnalytics( String params );
 
     /*
      * Settings events
      */
-    @Event( handlers = SettingsPresenter.class, historyConverter = TrackerHistoryConverter.class, name = "settings" )
-    void goToSettings();
+    @Event( handlers = {SettingsPresenter.class, MenuPresenter.class}, historyConverter = TrackerHistoryConverter.class, name = "settings" )
+    String goToSettings();
 }

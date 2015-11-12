@@ -5,7 +5,6 @@ import com.mvp4g.client.annotation.Presenter;
 import com.mvp4g.client.presenter.LazyPresenter;
 import com.mvp4g.client.view.LazyView;
 import com.tracker.client.TrackerEventBus;
-import com.tracker.client.presenter.ISettingsPresenter;
 import com.tracker.client.view.SettingsView;
 
 @Presenter(view = SettingsView.class)

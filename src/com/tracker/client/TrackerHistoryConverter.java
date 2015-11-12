@@ -12,11 +12,15 @@ public class TrackerHistoryConverter implements HistoryConverter<TrackerEventBus
     }
 
     @Override
-    public void convertFromToken( String name, String param, TrackerEventBus trackerEventBus) {
-        trackerEventBus.dispatch( name, param );
+    public void convertFromToken( String name, String params, TrackerEventBus trackerEventBus) {
+        trackerEventBus.dispatch( name, params );
     }
 
     public String convertToToken( String eventName ) {
-        return eventName;
+        return convertToToken( eventName, "" );
+    }
+
+    public String convertToToken( String eventName, String params ) {
+        return params;
     }
 }

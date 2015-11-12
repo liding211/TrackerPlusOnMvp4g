@@ -4,7 +4,7 @@
 			 xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	<g:HTMLPanel>
 		<b:NavPills>
-			<b:NavLink ui:field="logger">Log Entries</b:NavLink>
+			<b:NavLink ui:field="tracker">Log Entries</b:NavLink>
 			<b:NavLink ui:field="analytics">Analytics</b:NavLink>
 			<b:NavLink ui:field="settings">Settings</b:NavLink>
 		</b:NavPills>

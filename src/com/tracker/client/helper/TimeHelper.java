@@ -1,4 +1,4 @@
-package com.tracker.client;
+package com.tracker.client.helper;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -7,9 +7,7 @@ import com.google.gwt.i18n.client.constants.DateTimeConstants;
 import com.google.gwt.user.client.Window;
 import com.tracker.client.model.SettingsModel;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 public abstract class TimeHelper {
 

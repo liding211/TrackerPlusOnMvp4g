@@ -1,16 +1,12 @@
 package com.tracker.client.view;
 
-import com.github.gwtbootstrap.client.ui.Icon;
-import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
-import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.base.IconAnchor;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.TimeZone;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -19,8 +15,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.charts.client.table.Table;
 import com.googlecode.gwt.charts.client.table.TableOptions;
-import com.mvp4g.client.annotation.Presenter;
-import com.tracker.client.TimeHelper;
+import com.tracker.client.helper.HistoryHelper;
+import com.tracker.client.helper.TimeHelper;
 import com.tracker.client.model.LogCollection;
 import com.tracker.client.model.LogModel;
 import com.tracker.client.model.SettingsModel;
@@ -36,8 +32,8 @@ import com.googlecode.gwt.charts.client.corechart.ColumnChartOptions;
 import com.googlecode.gwt.charts.client.options.HAxis;
 import com.googlecode.gwt.charts.client.options.VAxis;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> implements IAnalyticsView {
@@ -79,13 +75,21 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     private List<LogModel> dataCollection;
     private Long selectedPeriod;
     private String selectedGroupType;
+    private Boolean hasHistory;
+    private static String PERIOD_SEVEN_DAYS = "week";
+    private static String PERIOD_ONE_MONTH = "month";
+    private static String PERIOD_THREE_MONTHS = "three_month";
+    private static String GROUP_BY_DAY = "day";
+    private static String GROUP_BY_WEEK = "week";
+    private static String DISPLAY_TYPE_TABLE = "table";
+    private static String DISPLAY_TYPE_GRAPH = "graph";
 
     @Override
     public void createView() {
         initWidget(uiBinder.createAndBindUi(this));
 
         settings = SettingsModel.getInstance();
-        selectedAnalyticDisplayType = "table";
+        selectedAnalyticDisplayType = AnalyticsView.DISPLAY_TYPE_TABLE;
 
         logCollection = LogCollection.getInstance();
         logCollection.fetchAllLogs();
@@ -100,7 +104,8 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
         tableIconAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                selectedAnalyticDisplayType = "table";
+                History.newItem(HistoryHelper.addParamToCurrentToken( "display_type", AnalyticsView.DISPLAY_TYPE_TABLE ), false);
+                selectedAnalyticDisplayType = AnalyticsView.DISPLAY_TYPE_TABLE;
                 redraw();
             }
         });
@@ -110,7 +115,8 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
         graphIconAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-            selectedAnalyticDisplayType = "graph";
+            History.newItem(HistoryHelper.addParamToCurrentToken( "display_type", AnalyticsView.DISPLAY_TYPE_GRAPH ), false);
+            selectedAnalyticDisplayType = AnalyticsView.DISPLAY_TYPE_GRAPH;
             redraw();
             }
         });
@@ -134,17 +140,16 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
             selectedGroupType
         );
         DataPlaceHolder.clear();
-        if( selectedAnalyticDisplayType == "table" ){
+        if( selectedAnalyticDisplayType == AnalyticsView.DISPLAY_TYPE_TABLE ){
             getTable();
         }
-        if( selectedAnalyticDisplayType == "graph" ){
+        if( selectedAnalyticDisplayType == AnalyticsView.DISPLAY_TYPE_GRAPH ){
             getGraph();
         }
     }
 
     private void getGraph() {
-        graphIconPlaceholder.setActive(true);
-        tableIconPlaceholder.setActive(false);
+        setParams( HistoryHelper.getUrlParams( History.getToken() ));
         ChartLoader chartLoader = new ChartLoader(ChartPackage.CORECHART);
         chartLoader.loadApi(new Runnable() {
 
@@ -159,8 +164,7 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
     }
 
     private void getTable() {
-        tableIconPlaceholder.setActive(true);
-        graphIconPlaceholder.setActive(false);
+        setParams( HistoryHelper.getUrlParams( History.getToken() ));
         ChartLoader chartLoader = new ChartLoader(ChartPackage.TABLE);
         chartLoader.loadApi(new Runnable() {
 
@@ -193,9 +197,6 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
                     : TimeHelper.getWeekRangeTitleByDate( dataCollection.get(i).getStartTime(), settings )
 
             );
-
-//            Date duration = new Date(dataCollection.get(i).getDuration());
-//            TimeZone tz = TimeZone.createTimeZone(0);
 
             dataTable.setCell(
                     i, 1, dataCollection.get(i).getDuration(),
@@ -246,48 +247,110 @@ public class AnalyticsView extends ReverseCompositeView<IAnalyticsPresenter> imp
 
     @UiHandler("groupByDay")
     public void onClickGroupByDay( ClickEvent e ){
+        History.newItem(HistoryHelper.addParamToCurrentToken( "group", AnalyticsView.GROUP_BY_DAY ), false);
         selectedGroupType = LogCollection.GROUP_BY_DAY_PATTERN;
-        groupByDay.setActive(true);
-        groupByWeek.setActive(false);
-        redraw();
+        resetView();
     }
 
     @UiHandler("groupByWeek")
     public void onClickGroupByWeek( ClickEvent e ){
+        History.newItem(HistoryHelper.addParamToCurrentToken( "group", AnalyticsView.GROUP_BY_WEEK ), false);
         selectedGroupType = LogCollection.GROUP_BY_WEEK_PATTERN;
-        groupByDay.setActive(false);
-        groupByWeek.setActive(true);
-        redraw();
+        resetView();
     }
 
     @UiHandler("periodSevenDays")
     public void onClickPeriodSevenDays( ClickEvent e ){
+        History.newItem(HistoryHelper.addParamToCurrentToken( "period", AnalyticsView.PERIOD_SEVEN_DAYS ), false);
         selectedPeriod = LogCollection.PERIOD_SEVEN_DAYS;
-        periodSevenDays.setActive(true);
-        periodMonth.setActive(false);
-        periodThreeMonths.setActive(false);
-        redraw();
+        resetView();
     }
 
     @UiHandler("periodMonth")
-    public void onClickPeriodMonth( ClickEvent e ){
+    public void onClickPeriodMonth(ClickEvent e ){
+        History.newItem(HistoryHelper.addParamToCurrentToken( "period", AnalyticsView.PERIOD_ONE_MONTH ), false);
         selectedPeriod = LogCollection.PERIOD_ONE_MONTH;
-        periodSevenDays.setActive(false);
-        periodMonth.setActive(true);
-        periodThreeMonths.setActive(false);
-        redraw();
+        resetView();
     }
 
     @UiHandler("periodThreeMonths")
     public void onClickPeriodThreeMonths( ClickEvent e ){
+        History.newItem(HistoryHelper.addParamToCurrentToken( "period", AnalyticsView.PERIOD_THREE_MONTHS ), false);
         selectedPeriod = LogCollection.PERIOD_THREE_MONTHS;
+        resetView();
+    }
+
+    public void setParams( String paramString ){
+
+        resetButtons();
+
+        HashMap<String, String> params = HistoryHelper.unserializeParams( paramString );
+
+        if( params.containsKey( "period" ) ){
+            if( params.get( "period" ).equals( AnalyticsView.PERIOD_SEVEN_DAYS ) ){
+                selectedPeriod = LogCollection.PERIOD_SEVEN_DAYS;
+                periodSevenDays.setActive(true);
+            }
+            if( params.get( "period" ).equals( AnalyticsView.PERIOD_ONE_MONTH ) ){
+                selectedPeriod = LogCollection.PERIOD_ONE_MONTH;
+                periodMonth.setActive(true);
+            }
+            if( params.get( "period" ).equals( AnalyticsView.PERIOD_THREE_MONTHS ) ){
+                selectedPeriod = LogCollection.PERIOD_THREE_MONTHS;
+                periodThreeMonths.setActive(true);
+            }
+        } else {
+            //by default
+            selectedPeriod = LogCollection.PERIOD_SEVEN_DAYS;
+            periodSevenDays.setActive(true);
+        }
+
+        if( params.containsKey( "group" ) ){
+            if( params.get( "group" ).equals( AnalyticsView.GROUP_BY_DAY ) ){
+                selectedGroupType = LogCollection.GROUP_BY_DAY_PATTERN;
+                groupByDay.setActive(true);
+            }
+            if( params.get( "group" ).equals( AnalyticsView.GROUP_BY_WEEK ) ){
+                selectedGroupType = LogCollection.GROUP_BY_WEEK_PATTERN;
+                groupByWeek.setActive(true);
+            }
+        } else {
+            //by default
+            selectedGroupType = LogCollection.GROUP_BY_DAY_PATTERN;
+            groupByDay.setActive(true);
+        }
+
+        if( params.containsKey( "display_type" ) ){
+            if( params.get( "display_type" ).equals( AnalyticsView.DISPLAY_TYPE_TABLE ) ){
+                selectedAnalyticDisplayType = AnalyticsView.DISPLAY_TYPE_TABLE;
+                tableIconPlaceholder.setActive(true);
+            }
+            if( params.get( "display_type" ).equals( AnalyticsView.DISPLAY_TYPE_GRAPH ) ){
+                selectedAnalyticDisplayType = AnalyticsView.DISPLAY_TYPE_GRAPH;
+                graphIconPlaceholder.setActive(true);
+            }
+        } else {
+            //by default
+            selectedAnalyticDisplayType = AnalyticsView.DISPLAY_TYPE_TABLE;
+            tableIconPlaceholder.setActive(true);
+        }
+    }
+
+    public void resetButtons(){
+
         periodSevenDays.setActive(false);
         periodMonth.setActive(false);
-        periodThreeMonths.setActive(true);
-        redraw();
+        periodThreeMonths.setActive(false);
+
+        groupByDay.setActive(false);
+        groupByWeek.setActive(false);
+
+        tableIconPlaceholder.setActive(false);
+        graphIconPlaceholder.setActive(false);
     }
 
     public void resetView(){
+        setParams( HistoryHelper.getUrlParams( History.getToken() ));
         redraw();
     }
 }

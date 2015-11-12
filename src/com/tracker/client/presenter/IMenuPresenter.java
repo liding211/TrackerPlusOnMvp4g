@@ -7,5 +7,4 @@ public interface IMenuPresenter {
     void goToAnalytics();
 
     void goToSettings();
-
 }
